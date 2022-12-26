@@ -1,1 +1,0 @@
-START initialise_compiler.bat
