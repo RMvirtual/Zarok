@@ -1,3 +1,4 @@
+@echo off
 SUBST w: %HOMEPATH%\Documents\GitHub\Compiler_Exercises
 SET PATH=w:%path%
 W:

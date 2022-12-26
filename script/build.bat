@@ -1,4 +1,7 @@
+@echo off
 mkdir ..\build
 pushd ..\build
-cl w:\src\main\simple_example.cpp
+: -Zi flag for debug info.
+: Return to handmade hero 001 for debugger setup info.
+cl -Zi w:\src\main\simple_example.cpp
 popd
