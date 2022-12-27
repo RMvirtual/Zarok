@@ -5,5 +5,5 @@ PUSHD w:\build
 : Return to handmade hero 001 for debugger setup info.
 : /EHsc added to shut up compiler warnings about not specifying
 : exception handling, but need to look up if correct one.
-cl -Zi w:\src\main\windows_main.cpp user32.lib /EHsc 
+cl -Zi w:\src\main\windows_main.cpp user32.lib gdi32.lib /EHsc 
 POPD

@@ -1,4 +1,3 @@
-#include <iostream>
 #include <Windows.h>
 
 LRESULT CALLBACK mainWindowCallback(
@@ -9,7 +8,6 @@ LRESULT CALLBACK mainWindowCallback(
   switch(message) {
     case WM_SIZE: {
       OutputDebugStringA("WM_SIZE\n");
-      std::cout << "Size\n";
     } break;
     
     case WM_DESTROY: {
@@ -24,6 +22,17 @@ LRESULT CALLBACK mainWindowCallback(
       OutputDebugStringA("WM_ACTIVATEAPP\n");
     } break;
     
+    case WM_PAINT: {
+      PAINTSTRUCT paint;
+      HDC deviceContext = BeginPaint(window, &paint);
+      int x = paint.rcPaint.left;
+      int y = paint.rcPaint.top;
+      int width = paint.rcPaint.right - paint.rcPaint.left;
+      int height = paint.rcPaint.bottom - paint.rcPaint.top;
+      PatBlt(deviceContext, x, y, width, height, WHITENESS);
+      EndPaint(window, &paint);
+    }
+
     default: {
       result = DefWindowProc(window, message, wParam, lParam);
     } break;
