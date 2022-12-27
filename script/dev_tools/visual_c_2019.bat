@@ -1,6 +1,6 @@
 @echo off
 
-CALL set_github_path.bat
+CALL set_working_directory.bat
 
 : Start MSVC dev environment for compiler command.
 CALL ^
