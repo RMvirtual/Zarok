@@ -1,9 +1,6 @@
 @echo off
 
-: Create W: drive path for working git/dev directory.
-SUBST w: %HOMEPATH%\Documents\GitHub\Compiler_Exercises
-SET PATH=w:%path%
-W:
+CALL set_github_path.bat
 
 : Start MSVC dev environment for compiler command.
 CALL ^
