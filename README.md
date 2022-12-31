@@ -1,2 +1,2 @@
-# Compiler_Exercises
-Set of exercises to play around with / learn about C++ compilers.
+# Fortesque (Handmade Edition)
+Attempt at building a game engine from scratch without external libraries other than the basic Windows API.
