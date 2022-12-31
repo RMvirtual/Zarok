@@ -15,6 +15,7 @@ LRESULT CALLBACK mainWindowCallback(
     } break;
     
     case WM_CLOSE: {
+      PostQuitMessage(0);
       OutputDebugStringA("WM_CLOSE\n");
     } break;
     
