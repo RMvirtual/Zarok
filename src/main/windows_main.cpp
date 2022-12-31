@@ -1,5 +1,10 @@
 #include <Windows.h>
 
+static void resizeDIBSection(int width, int height)
+{
+
+}
+
 LRESULT CALLBACK mainWindowCallback(
   HWND window, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -7,7 +12,11 @@ LRESULT CALLBACK mainWindowCallback(
 
   switch(message) {
     case WM_SIZE: {
-      OutputDebugStringA("WM_SIZE\n");
+      RECT clientRectangle;
+      GetClientRect(window, &clientRectangle);
+      int width = clientRectangle.right - clientRectangle.left;
+      int height = clientRectangle.bottom - clientRectangle.top;
+      resizeDIBSection(width, height);
     } break;
     
     case WM_DESTROY: {
@@ -30,7 +39,11 @@ LRESULT CALLBACK mainWindowCallback(
       int y = paint.rcPaint.top;
       int width = paint.rcPaint.right - paint.rcPaint.left;
       int height = paint.rcPaint.bottom - paint.rcPaint.top;
-      PatBlt(deviceContext, x, y, width, height, WHITENESS);
+      static DWORD operation = WHITENESS;
+      PatBlt(deviceContext, x, y, width, height, operation);
+
+      operation = operation == WHITENESS ? BLACKNESS : WHITENESS;
+
       EndPaint(window, &paint);
     }
 
