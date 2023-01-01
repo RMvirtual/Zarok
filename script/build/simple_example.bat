@@ -1,4 +1,5 @@
 @ECHO OFF
+CLS
 MKDIR w:\build
 PUSHD w:\build
 : -Zi flag for debug info.

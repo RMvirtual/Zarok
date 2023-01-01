@@ -1,93 +1,82 @@
-#include <Windows.h>
+#include <windows.h>
 
-static void resizeDIBSection(int width, int height)
+// Declared ahead of time.
+LRESULT CALLBACK WindowProc(
+    HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+/**
+ * @brief Main entry point for the Windows API to launch from.
+ * Hence, no refactoring out of legacy parameters due to the interface
+ * being set in stone by the API.
+ */
+int CALLBACK WinMain(
+    HINSTANCE instanceHandle, HINSTANCE prevInstance,
+    LPSTR commandLineArgs, int minimisedOption)
 {
+  // Register window class.
+  // const wchar_t windowClassName[] = L"Fortesque";
 
-}
+  WNDCLASS windowClass {};
+  windowClass.lpfnWndProc = WindowProc;
+  windowClass.hInstance = instanceHandle;
+  windowClass.lpszClassName = (LPCSTR) L"Fortesque";
 
-LRESULT CALLBACK mainWindowCallback(
-  HWND window, UINT message, WPARAM wParam, LPARAM lParam)
-{
-  LRESULT result = 0;
+  RegisterClass(&windowClass);
 
-  switch(message) {
-    case WM_SIZE: {
-      RECT clientRectangle;
-      GetClientRect(window, &clientRectangle);
-      int width = clientRectangle.right - clientRectangle.left;
-      int height = clientRectangle.bottom - clientRectangle.top;
-      resizeDIBSection(width, height);
-    } break;
-    
-    case WM_DESTROY: {
-      OutputDebugStringA("WM_DESTROY\n");
-    } break;
-    
-    case WM_CLOSE: {
-      PostQuitMessage(0);
-      OutputDebugStringA("WM_CLOSE\n");
-    } break;
-    
-    case WM_ACTIVATEAPP: {
-      OutputDebugStringA("WM_ACTIVATEAPP\n");
-    } break;
-    
-    case WM_PAINT: {
-      PAINTSTRUCT paint;
-      HDC deviceContext = BeginPaint(window, &paint);
-      int x = paint.rcPaint.left;
-      int y = paint.rcPaint.top;
-      int width = paint.rcPaint.right - paint.rcPaint.left;
-      int height = paint.rcPaint.bottom - paint.rcPaint.top;
-      static DWORD operation = WHITENESS;
-      PatBlt(deviceContext, x, y, width, height, operation);
+  // Create window.
+  HWND hwnd = CreateWindowEx(
+    0,                           // Optional window styles.
+    (LPCSTR) L"Fortesque",             // Window class
+    (LPCSTR) L"Learn to Program Windows", // Window text
+    WS_OVERLAPPEDWINDOW,         // Window style
 
-      operation = operation == WHITENESS ? BLACKNESS : WHITENESS;
+    // Size and position
+    CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 
-      EndPaint(window, &paint);
-    }
+    NULL,           // Parent window
+    NULL,           // Menu
+    instanceHandle, // Instance handle
+    NULL            // Additional application data
+  );
 
-    default: {
-      result = DefWindowProc(window, message, wParam, lParam);
-    } break;
+  if (hwnd == NULL)
+  {
+    return 0;
   }
 
-  return result;
-}
+  ShowWindow(hwnd, minimisedOption);
 
-int CALLBACK WinMain(
-  HINSTANCE instance, HINSTANCE prevInstance, LPSTR commandLine, int showCode)
-{
-  WNDCLASS windowClass {};
-
-  windowClass.style = CS_OWNDC|CS_HREDRAW|CS_VREDRAW;
-  windowClass.lpfnWndProc = mainWindowCallback;
-  windowClass.hInstance = instance;
-  windowClass.lpszClassName = "CompilerTestWindowClass";
-
-  if (RegisterClass(&windowClass)) {
-    HWND windowHandle = CreateWindowEx(
-      0, windowClass.lpszClassName, "Compiler Test", 
-      WS_OVERLAPPEDWINDOW|WS_VISIBLE,
-      CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-      0, 0, instance, 0
-    );
-
-    if (windowHandle) {
-      while (true) {
-        MSG message;
-        BOOL messageResult = GetMessage(&message, 0, 0, 0);
-
-        if (messageResult > 0) {
-          TranslateMessage(&message);
-          DispatchMessageA(&message);
-        }
-
-        else
-          break;
-      }
-    }
+  // Run the message loop.
+  MSG msg = {};
+  while (GetMessage(&msg, NULL, 0, 0) > 0)
+  {
+    TranslateMessage(&msg);
+    DispatchMessage(&msg);
   }
 
   return 0;
+
+  return 0;
+}
+
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+  switch (uMsg)
+  {
+  case WM_DESTROY:
+    PostQuitMessage(0);
+    return 0;
+
+  case WM_PAINT:
+  {
+    PAINTSTRUCT ps;
+    HDC hdc = BeginPaint(hwnd, &ps);
+
+    // All painting occurs here, between BeginPaint and EndPaint.
+    FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
+    EndPaint(hwnd, &ps);
+  }
+    return 0;
+  }
+  return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
