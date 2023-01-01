@@ -38,7 +38,7 @@ LRESULT CALLBACK updateCallback(
   return DefWindowProcW(windowHandle, updateEvent, wParam, lParam);
 }
 
-WNDCLASSW createWindowClass(HINSTANCE* instanceHandle)
+WNDCLASSW windowClass(HINSTANCE* instanceHandle)
 {
   WNDCLASSW windowClass {};
   windowClass.lpfnWndProc = updateCallback;
@@ -50,8 +50,7 @@ WNDCLASSW createWindowClass(HINSTANCE* instanceHandle)
 
 void registerWindowClass(HINSTANCE* instanceHandle)
 {
-  WNDCLASSW windowClass = createWindowClass(instanceHandle);
-  RegisterClassW(&windowClass);
+  RegisterClassW(&windowClass(instanceHandle));
 }
 
 WindowValues mainWindowValues(HINSTANCE* instanceHandle)
@@ -91,16 +90,18 @@ HWND createWindow(HINSTANCE* instanceHandle)
   );
 }
 
-
-
 void runEventLoop()
 {
   MSG event = {};
 
-  while (GetMessageW(&event, NULL, 0, 0) > 0) {
-    TranslateMessage(&event);
-    DispatchMessageW(&event);
-  }
+  while (GetMessageW(&event, NULL, 0, 0) > 0)
+    processEvent(&event);
+}
+
+void processEvent(MSG* event)
+{
+  TranslateMessage(event);
+  DispatchMessageW(event);
 }
 
 /**
