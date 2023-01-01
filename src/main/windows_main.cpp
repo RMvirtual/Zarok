@@ -55,16 +55,16 @@ int CALLBACK WinMain(
   HWND windowHandle = CreateWindowExW(
     0,                           // Optional window styles.
     windowClassName,             // Window class
-    L"Fortesque", // Window text
+    L"Fortesque",                // Window text
     WS_OVERLAPPEDWINDOW,         // Window style
 
     // Size and position
     CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 
-    NULL,           // Parent window
-    NULL,           // Menu
-    instanceHandle, // Instance handle
-    NULL            // Additional application data
+    NULL,                         // Parent window
+    NULL,                         // Menu
+    instanceHandle,               // Instance handle
+    NULL                          // Additional application data
   );
 
   if (windowHandle == NULL)
@@ -75,9 +75,9 @@ int CALLBACK WinMain(
   // Run the message loop.
   MSG message = {};
 
-  while (GetMessage(&message, NULL, 0, 0) > 0) {
+  while (GetMessageW(&message, NULL, 0, 0) > 0) {
     TranslateMessage(&message);
-    DispatchMessage(&message);
+    DispatchMessageW(&message);
   }
 
   return 0;
