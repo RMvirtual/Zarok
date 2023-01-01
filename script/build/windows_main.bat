@@ -7,7 +7,8 @@ PUSHD w:\build
 : /EHsc added to shut up compiler warnings about not specifying
 : exception handling, but need to look up if correct one.
 cl -Zi ^
-    w:\src\main\windows_main.cpp ^
+    /I"w:\src\main" ^
+    w:\src\main\app\windows_main.cpp ^
     w:\src\main\windows\gui.cpp ^
     user32.lib gdi32.lib /EHsc 
 POPD
