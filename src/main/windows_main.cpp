@@ -86,7 +86,7 @@ HWND createWindow(HINSTANCE* instanceHandle)
     values.x, values.y, values.width, values.height,
     values.parentWindow,
     values.menu,
-    *instanceHandle,
+    values.instanceHandle,
     values.arbitraryData
   );
 }
