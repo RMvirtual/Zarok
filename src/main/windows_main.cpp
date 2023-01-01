@@ -27,7 +27,7 @@ int CALLBACK WinMain(
   // Create window.
   HWND hwnd = CreateWindowExW(
     0,                           // Optional window styles.
-    L"Fortesque",             // Window class
+    windowClassName,             // Window class
     L"Learn to Program Windows", // Window text
     WS_OVERLAPPEDWINDOW,         // Window style
 
@@ -41,9 +41,7 @@ int CALLBACK WinMain(
   );
 
   if (hwnd == NULL)
-  {
     return 0;
-  }
 
   ShowWindow(hwnd, minimisedOption);
 
