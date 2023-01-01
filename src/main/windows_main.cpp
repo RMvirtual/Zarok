@@ -16,15 +16,15 @@ int CALLBACK WinMain(
   // Register window class.
   // const wchar_t windowClassName[] = L"Fortesque";
 
-  WNDCLASS windowClass {};
+  WNDCLASSA windowClass {};
   windowClass.lpfnWndProc = WindowProc;
   windowClass.hInstance = instanceHandle;
   windowClass.lpszClassName = (LPCSTR) L"Fortesque";
 
-  RegisterClass(&windowClass);
+  RegisterClassA(&windowClass);
 
   // Create window.
-  HWND hwnd = CreateWindowEx(
+  HWND hwnd = CreateWindowExA(
     0,                           // Optional window styles.
     (LPCSTR) L"Fortesque",             // Window class
     (LPCSTR) L"Learn to Program Windows", // Window text
