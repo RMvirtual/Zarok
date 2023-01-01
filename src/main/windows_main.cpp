@@ -1,9 +1,9 @@
 #include <windows.h>
 
 LRESULT CALLBACK updateCallback(
-  HWND windowHandle, UINT uMsg, WPARAM wParam, LPARAM lParam)
+  HWND windowHandle, UINT updateMessage, WPARAM wParam, LPARAM lParam)
 {
-  switch (uMsg) {
+  switch (updateMessage) {
     case WM_DESTROY: {
       PostQuitMessage(0);
     } return 0;
@@ -18,7 +18,7 @@ LRESULT CALLBACK updateCallback(
     } return 0;
   }
 
-  return DefWindowProcW(windowHandle, uMsg, wParam, lParam);
+  return DefWindowProcW(windowHandle, updateMessage, wParam, lParam);
 }
 
 WNDCLASSW createWindowClass(HINSTANCE* instanceHandle)
@@ -74,6 +74,7 @@ int CALLBACK WinMain(
 
   // Run the message loop.
   MSG message = {};
+
   while (GetMessage(&message, NULL, 0, 0) > 0) {
     TranslateMessage(&message);
     DispatchMessage(&message);
