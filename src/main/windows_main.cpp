@@ -1,13 +1,29 @@
 #include <windows.h>
 
-// Declared ahead of time.
-LRESULT CALLBACK WindowProc(
-    HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK updateCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+  switch (uMsg) {
+    case WM_DESTROY: {
+      PostQuitMessage(0);
+    } return 0;
+
+    case WM_PAINT: {
+      PAINTSTRUCT ps;
+      HDC hdc = BeginPaint(hwnd, &ps);
+
+      // All painting occurs here, between BeginPaint and EndPaint.
+      FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
+      EndPaint(hwnd, &ps);
+    } return 0;
+  }
+
+  return DefWindowProcW(hwnd, uMsg, wParam, lParam);
+}
 
 WNDCLASSW createWindowClass(HINSTANCE* instanceHandle)
 {
   WNDCLASSW windowClass {};
-  windowClass.lpfnWndProc = WindowProc;
+  windowClass.lpfnWndProc = updateCallback;
   windowClass.hInstance = *instanceHandle;
   windowClass.lpszClassName = L"Fortesque";
 
@@ -31,8 +47,6 @@ int CALLBACK WinMain(
     HINSTANCE instanceHandle, HINSTANCE prevInstance,
     LPSTR commandLineArgs, int minimisedOption)
 {
-  // Register window class.
-
   const wchar_t windowClassName[] = L"Fortesque";
   registerWindowClass(&instanceHandle);
 
@@ -65,24 +79,4 @@ int CALLBACK WinMain(
   }
 
   return 0;
-}
-
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-  switch (uMsg) {
-    case WM_DESTROY: {
-      PostQuitMessage(0);
-    } return 0;
-
-    case WM_PAINT: {
-      PAINTSTRUCT ps;
-      HDC hdc = BeginPaint(hwnd, &ps);
-
-      // All painting occurs here, between BeginPaint and EndPaint.
-      FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
-      EndPaint(hwnd, &ps);
-    } return 0;
-  }
-
-  return DefWindowProcW(hwnd, uMsg, wParam, lParam);
 }
