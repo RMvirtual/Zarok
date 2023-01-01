@@ -1,6 +1,4 @@
 @ECHO OFF
-
-CD environment_setup
 CALL set_working_directory.bat
 
 IF "%1%"=="" GOTO START_2019

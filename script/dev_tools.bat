@@ -1,4 +1,4 @@
 @ECHO OFF
-PUSHD dev_tools
+PUSHD environment
 START start_shell.bat %1
 POPD
