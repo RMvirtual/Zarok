@@ -4,6 +4,16 @@
 LRESULT CALLBACK WindowProc(
     HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+WNDCLASSW createWindowClass(HINSTANCE* instanceHandle)
+{
+  WNDCLASSW windowClass {};
+  windowClass.lpfnWndProc = WindowProc;
+  windowClass.hInstance = *instanceHandle;
+  windowClass.lpszClassName = L"Fortesque";
+
+  return windowClass;
+}
+
 /**
  * @brief Main entry point for the Windows API to launch from.
  * Hence, no refactoring out of legacy parameters due to the interface
@@ -16,11 +26,7 @@ int CALLBACK WinMain(
   // Register window class.
   const wchar_t windowClassName[] = L"Fortesque";
 
-  WNDCLASSW windowClass {};
-  windowClass.lpfnWndProc = WindowProc;
-  windowClass.hInstance = instanceHandle;
-  windowClass.lpszClassName = windowClassName;
-
+  WNDCLASSW windowClass = createWindowClass(&instanceHandle);
   RegisterClassW(&windowClass);
 
   // Create window.
