@@ -1,10 +1,11 @@
+#include <string>
 #include <windows.h>
 
 struct WindowValues
 {
   DWORD behaviours;
-  LPCWSTR className;
-  LPCWSTR titleBar;
+  std::wstring className;
+  std::wstring titleBar;
   DWORD style;
   int x;
   int y;
@@ -42,15 +43,13 @@ WNDCLASSW createWindowClass(HINSTANCE* instanceHandle)
   WNDCLASSW windowClass {};
   windowClass.lpfnWndProc = updateCallback;
   windowClass.hInstance = *instanceHandle;
-  windowClass.lpszClassName = L"Fortesque";
+  windowClass.lpszClassName = L"Zarok";
 
   return windowClass;
 }
 
 void registerWindowClass(HINSTANCE* instanceHandle)
 {
-  const wchar_t windowClassName[] = L"Fortesque";
-
   WNDCLASSW windowClass = createWindowClass(instanceHandle);
   RegisterClassW(&windowClass);
 }
@@ -77,11 +76,12 @@ WindowValues mainWindowValues(HINSTANCE* instanceHandle)
 HWND createWindow(HINSTANCE* instanceHandle)
 {
   registerWindowClass(instanceHandle);
+  auto values = mainWindowValues(instanceHandle);
 
   return CreateWindowExW(
-    0,
-    L"Fortesque",                // Window class
-    L"Fortesque",                // Window text
+    values.behaviours,
+    values.className.c_str(),                // Window class
+    values.titleBar.c_str(),                // Window text
     WS_OVERLAPPEDWINDOW,         // Window style
     CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 
