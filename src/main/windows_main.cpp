@@ -80,15 +80,14 @@ HWND createWindow(HINSTANCE* instanceHandle)
 
   return CreateWindowExW(
     values.behaviours,
-    values.className.c_str(),                // Window class
-    values.titleBar.c_str(),                // Window text
-    WS_OVERLAPPEDWINDOW,         // Window style
-    CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-
-    NULL,                         
-    NULL,                         // Menu
-    *instanceHandle,               // Instance handle
-    NULL                          // Additional application data
+    values.className.c_str(),
+    values.titleBar.c_str(),
+    values.style,
+    values.x, values.y, values.width, values.height,
+    values.parentWindow,
+    values.menu,
+    *instanceHandle,
+    values.arbitraryData
   );
 }
 
