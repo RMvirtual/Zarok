@@ -59,6 +59,16 @@ HWND createWindow(HINSTANCE* instanceHandle)
   );
 }
 
+void runEventLoop()
+{
+  MSG event = {};
+
+  while (GetMessageW(&event, NULL, 0, 0) > 0) {
+    TranslateMessage(&event);
+    DispatchMessageW(&event);
+  }
+}
+
 /**
  * @brief Main entry point for the Windows API to launch from.
  * Hence, no refactoring out of legacy parameters due to the interface
@@ -74,14 +84,7 @@ int CALLBACK WinMain(
     return 0;
 
   ShowWindow(windowHandle, minimisationOption);
-
-  // Run the message loop.
-  MSG message = {};
-
-  while (GetMessageW(&message, NULL, 0, 0) > 0) {
-    TranslateMessage(&message);
-    DispatchMessageW(&message);
-  }
+  runEventLoop();
 
   return 0;
 }
