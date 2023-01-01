@@ -90,12 +90,9 @@ HWND createWindow(HINSTANCE* instanceHandle)
   );
 }
 
-void runEventLoop()
+bool isEvent(MSG* event)
 {
-  MSG event = {};
-
-  while (GetMessageW(&event, NULL, 0, 0) > 0)
-    processEvent(&event);
+  return GetMessageW(event, NULL, 0, 0) > 0;
 }
 
 void processEvent(MSG* event)
@@ -103,6 +100,15 @@ void processEvent(MSG* event)
   TranslateMessage(event);
   DispatchMessageW(event);
 }
+
+void runEventLoop()
+{
+  MSG event {};
+
+  while (isEvent(&event))
+    processEvent(&event);
+}
+
 
 /**
  * @brief Main entry point for the Windows API to launch from.
