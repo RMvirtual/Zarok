@@ -20,7 +20,6 @@ int CALLBACK WinMain(
   WNDCLASSW windowClass {};
   windowClass.lpfnWndProc = WindowProc;
   windowClass.hInstance = instanceHandle;
-  // windowClass.lpszClassName = (LPCSTR) L"Fortesque";
   windowClass.lpszClassName = windowClassName;
 
   RegisterClassW(&windowClass);
@@ -28,8 +27,8 @@ int CALLBACK WinMain(
   // Create window.
   HWND hwnd = CreateWindowExW(
     0,                           // Optional window styles.
-    (LPCWSTR) L"Fortesque",             // Window class
-    (LPCWSTR) L"Learn to Program Windows", // Window text
+    L"Fortesque",             // Window class
+    L"Learn to Program Windows", // Window text
     WS_OVERLAPPEDWINDOW,         // Window style
 
     // Size and position
