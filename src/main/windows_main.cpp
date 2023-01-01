@@ -14,6 +14,14 @@ WNDCLASSW createWindowClass(HINSTANCE* instanceHandle)
   return windowClass;
 }
 
+void registerWindowClass(HINSTANCE* instanceHandle)
+{
+  const wchar_t windowClassName[] = L"Fortesque";
+
+  WNDCLASSW windowClass = createWindowClass(instanceHandle);
+  RegisterClassW(&windowClass);
+}
+
 /**
  * @brief Main entry point for the Windows API to launch from.
  * Hence, no refactoring out of legacy parameters due to the interface
@@ -24,10 +32,9 @@ int CALLBACK WinMain(
     LPSTR commandLineArgs, int minimisedOption)
 {
   // Register window class.
-  const wchar_t windowClassName[] = L"Fortesque";
 
-  WNDCLASSW windowClass = createWindowClass(&instanceHandle);
-  RegisterClassW(&windowClass);
+  const wchar_t windowClassName[] = L"Fortesque";
+  registerWindowClass(&instanceHandle);
 
   // Create window.
   HWND hwnd = CreateWindowExW(
