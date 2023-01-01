@@ -14,8 +14,7 @@ int CALLBACK WinMain(
     LPSTR commandLineArgs, int minimisedOption)
 {
   // Register window class.
-  // const char* windowClassName = "Fortesque";
-  LPCWSTR windowClassName = L"Fortesque";
+  const wchar_t windowClassName[] = L"Fortesque";
 
   WNDCLASSW windowClass {};
   windowClass.lpfnWndProc = WindowProc;
@@ -77,5 +76,5 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   }
     return 0;
   }
-  return DefWindowProc(hwnd, uMsg, wParam, lParam);
+  return DefWindowProcW(hwnd, uMsg, wParam, lParam);
 }
