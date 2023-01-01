@@ -41,6 +41,8 @@ void registerWindowClass(HINSTANCE* instanceHandle)
 
 HWND createWindow(HINSTANCE* instanceHandle)
 {
+  registerWindowClass(instanceHandle);
+
   return CreateWindowExW(
     0,                           // Optional window styles.
     L"Fortesque",                // Window class
@@ -66,7 +68,6 @@ int CALLBACK WinMain(
     HINSTANCE instanceHandle, HINSTANCE prevInstance,
     LPSTR commandLineArgs, int minimisationOption)
 {
-  registerWindowClass(&instanceHandle);
   auto windowHandle = createWindow(&instanceHandle);
 
   if (windowHandle == NULL)
