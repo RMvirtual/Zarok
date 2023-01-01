@@ -1,6 +1,7 @@
 #include <windows.h>
 
-LRESULT CALLBACK updateCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK updateCallback(
+  HWND windowHandle, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   switch (uMsg) {
     case WM_DESTROY: {
@@ -9,15 +10,15 @@ LRESULT CALLBACK updateCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
     case WM_PAINT: {
       PAINTSTRUCT ps;
-      HDC hdc = BeginPaint(hwnd, &ps);
+      HDC hdc = BeginPaint(windowHandle, &ps);
 
       // All painting occurs here, between BeginPaint and EndPaint.
       FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
-      EndPaint(hwnd, &ps);
+      EndPaint(windowHandle, &ps);
     } return 0;
   }
 
-  return DefWindowProcW(hwnd, uMsg, wParam, lParam);
+  return DefWindowProcW(windowHandle, uMsg, wParam, lParam);
 }
 
 WNDCLASSW createWindowClass(HINSTANCE* instanceHandle)
@@ -45,13 +46,13 @@ void registerWindowClass(HINSTANCE* instanceHandle)
  */
 int CALLBACK WinMain(
     HINSTANCE instanceHandle, HINSTANCE prevInstance,
-    LPSTR commandLineArgs, int minimisedOption)
+    LPSTR commandLineArgs, int minimisationOption)
 {
   const wchar_t windowClassName[] = L"Fortesque";
   registerWindowClass(&instanceHandle);
 
   // Create window.
-  HWND hwnd = CreateWindowExW(
+  HWND windowHandle = CreateWindowExW(
     0,                           // Optional window styles.
     windowClassName,             // Window class
     L"Fortesque", // Window text
@@ -66,16 +67,16 @@ int CALLBACK WinMain(
     NULL            // Additional application data
   );
 
-  if (hwnd == NULL)
+  if (windowHandle == NULL)
     return 0;
 
-  ShowWindow(hwnd, minimisedOption);
+  ShowWindow(windowHandle, minimisationOption);
 
   // Run the message loop.
-  MSG msg = {};
-  while (GetMessage(&msg, NULL, 0, 0) > 0) {
-    TranslateMessage(&msg);
-    DispatchMessage(&msg);
+  MSG message = {};
+  while (GetMessage(&message, NULL, 0, 0) > 0) {
+    TranslateMessage(&message);
+    DispatchMessage(&message);
   }
 
   return 0;
