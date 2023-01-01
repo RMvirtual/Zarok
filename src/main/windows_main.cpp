@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include <windows.h>
 
 struct EventHandler
@@ -10,9 +11,9 @@ struct EventHandler
     this->event = {};
   }
 
-  bool isEvent()
+  bool eventAvailable()
   {
-    return GetMessageW(&(this->event), NULL, 0, 0) > 0;
+    return GetMessageW(&this->event, NULL, 0, 0) > 0;
   }
 
   void processEvent()
@@ -21,9 +22,9 @@ struct EventHandler
     DispatchMessageW(&this->event);
   }
 
-  void runEventLoop()
+  void run()
   {
-    while (this->isEvent())
+    while (this->eventAvailable())
       this->processEvent();
   }
 };
@@ -34,10 +35,7 @@ struct WindowValues
   std::wstring className;
   std::wstring titleBar;
   DWORD style;
-  int x;
-  int y;
-  int width;
-  int height;
+  int x; int y; int width; int height;
   HWND parentWindow;
   HMENU menu;
   HINSTANCE instanceHandle;
@@ -117,6 +115,13 @@ HWND createWindow(HINSTANCE* instanceHandle)
   );
 }
 
+void launchMainWindow(HWND windowHandle, int minimisationOption)
+{
+  ShowWindow(windowHandle, minimisationOption);
+  EventHandler eventHandler {};
+  eventHandler.run();
+}
+
 /**
  * @brief Main entry point for the Windows API to launch from.
  */
@@ -124,14 +129,7 @@ int CALLBACK WinMain(
     HINSTANCE instanceHandle, HINSTANCE prevInstance,
     LPSTR commandLineArgs, int minimisationOption)
 {
-  auto windowHandle = createWindow(&instanceHandle);
-
-  if (windowHandle == NULL)
-    return 0;
-
-  ShowWindow(windowHandle, minimisationOption);
-  auto eventHandler = EventHandler();
-  eventHandler.runEventLoop();
+  launchMainWindow(createWindow(&instanceHandle), minimisationOption);
 
   return 0;
 }
