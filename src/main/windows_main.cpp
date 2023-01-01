@@ -66,26 +66,7 @@ int CALLBACK WinMain(
     HINSTANCE instanceHandle, HINSTANCE prevInstance,
     LPSTR commandLineArgs, int minimisationOption)
 {
-  const wchar_t windowClassName[] = L"Fortesque";
   registerWindowClass(&instanceHandle);
-
-  /* Create window.
-  HWND windowHandle = CreateWindowExW(
-    0,                           // Optional window styles.
-    windowClassName,             // Window class
-    L"Fortesque",                // Window text
-    WS_OVERLAPPEDWINDOW,         // Window style
-
-    // Size and position
-    CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-
-    NULL,                         // Parent window
-    NULL,                         // Menu
-    instanceHandle,               // Instance handle
-    NULL                          // Additional application data
-  );
-  */
-  
   HWND windowHandle = createWindow(&instanceHandle);
 
   if (windowHandle == NULL)
