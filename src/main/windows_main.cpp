@@ -67,7 +67,7 @@ int CALLBACK WinMain(
     LPSTR commandLineArgs, int minimisationOption)
 {
   registerWindowClass(&instanceHandle);
-  HWND windowHandle = createWindow(&instanceHandle);
+  auto windowHandle = createWindow(&instanceHandle);
 
   if (windowHandle == NULL)
     return 0;
