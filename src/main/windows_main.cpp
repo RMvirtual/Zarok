@@ -39,6 +39,24 @@ void registerWindowClass(HINSTANCE* instanceHandle)
   RegisterClassW(&windowClass);
 }
 
+HWND createWindow(HINSTANCE* instanceHandle)
+{
+  return CreateWindowExW(
+    0,                           // Optional window styles.
+    L"Fortesque",                // Window class
+    L"Fortesque",                // Window text
+    WS_OVERLAPPEDWINDOW,         // Window style
+
+    // Size and position
+    CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+
+    NULL,                         // Parent window
+    NULL,                         // Menu
+    *instanceHandle,               // Instance handle
+    NULL                          // Additional application data
+  );
+}
+
 /**
  * @brief Main entry point for the Windows API to launch from.
  * Hence, no refactoring out of legacy parameters due to the interface
@@ -51,7 +69,7 @@ int CALLBACK WinMain(
   const wchar_t windowClassName[] = L"Fortesque";
   registerWindowClass(&instanceHandle);
 
-  // Create window.
+  /* Create window.
   HWND windowHandle = CreateWindowExW(
     0,                           // Optional window styles.
     windowClassName,             // Window class
@@ -66,6 +84,9 @@ int CALLBACK WinMain(
     instanceHandle,               // Instance handle
     NULL                          // Additional application data
   );
+  */
+  
+  HWND windowHandle = createWindow(&instanceHandle);
 
   if (windowHandle == NULL)
     return 0;
