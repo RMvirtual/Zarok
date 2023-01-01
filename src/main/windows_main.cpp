@@ -1,5 +1,21 @@
 #include <windows.h>
 
+struct WindowValues
+{
+  DWORD behaviours;
+  LPCWSTR className;
+  LPCWSTR titleBar;
+  DWORD style;
+  int x;
+  int y;
+  int width;
+  int height;
+  HWND parentWindow;
+  HMENU menu;
+  HINSTANCE instanceHandle;
+  LPVOID arbitraryData;
+};
+
 LRESULT CALLBACK updateCallback(
   HWND windowHandle, UINT updateEvent, WPARAM wParam, LPARAM lParam)
 {
@@ -44,15 +60,13 @@ HWND createWindow(HINSTANCE* instanceHandle)
   registerWindowClass(instanceHandle);
 
   return CreateWindowExW(
-    0,                           // Optional window styles.
+    0,
     L"Fortesque",                // Window class
     L"Fortesque",                // Window text
     WS_OVERLAPPEDWINDOW,         // Window style
-
-    // Size and position
     CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 
-    NULL,                         // Parent window
+    NULL,                         
     NULL,                         // Menu
     *instanceHandle,               // Instance handle
     NULL                          // Additional application data
