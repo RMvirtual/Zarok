@@ -71,8 +71,6 @@ void runEventLoop()
 
 /**
  * @brief Main entry point for the Windows API to launch from.
- * Hence, no refactoring out of legacy parameters due to the interface
- * being set in stone by the API.
  */
 int CALLBACK WinMain(
     HINSTANCE instanceHandle, HINSTANCE prevInstance,
