@@ -27,7 +27,7 @@ int CALLBACK WinMain(
   HWND hwnd = CreateWindowExW(
     0,                           // Optional window styles.
     windowClassName,             // Window class
-    L"Learn to Program Windows", // Window text
+    L"Fortesque", // Window text
     WS_OVERLAPPEDWINDOW,         // Window style
 
     // Size and position
@@ -76,5 +76,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   }
     return 0;
   }
+
   return DefWindowProcW(hwnd, uMsg, wParam, lParam);
 }
