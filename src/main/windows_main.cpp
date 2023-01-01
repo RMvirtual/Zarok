@@ -1,6 +1,33 @@
 #include <string>
 #include <windows.h>
 
+struct EventHandler
+{
+  MSG event;
+
+  EventHandler()
+  {
+    this->event = {};
+  }
+
+  bool isEvent()
+  {
+    return GetMessageW(&(this->event), NULL, 0, 0) > 0;
+  }
+
+  void processEvent()
+  {
+    TranslateMessage(&this->event);
+    DispatchMessageW(&this->event);
+  }
+
+  void runEventLoop()
+  {
+    while (this->isEvent())
+      this->processEvent();
+  }
+};
+
 struct WindowValues
 {
   DWORD behaviours;
@@ -90,26 +117,6 @@ HWND createWindow(HINSTANCE* instanceHandle)
   );
 }
 
-bool isEvent(MSG* event)
-{
-  return GetMessageW(event, NULL, 0, 0) > 0;
-}
-
-void processEvent(MSG* event)
-{
-  TranslateMessage(event);
-  DispatchMessageW(event);
-}
-
-void runEventLoop()
-{
-  MSG event {};
-
-  while (isEvent(&event))
-    processEvent(&event);
-}
-
-
 /**
  * @brief Main entry point for the Windows API to launch from.
  */
@@ -123,7 +130,8 @@ int CALLBACK WinMain(
     return 0;
 
   ShowWindow(windowHandle, minimisationOption);
-  runEventLoop();
+  auto eventHandler = EventHandler();
+  eventHandler.runEventLoop();
 
   return 0;
 }
