@@ -1,9 +1,9 @@
 #include <windows.h>
 
 LRESULT CALLBACK updateCallback(
-  HWND windowHandle, UINT updateMessage, WPARAM wParam, LPARAM lParam)
+  HWND windowHandle, UINT updateEvent, WPARAM wParam, LPARAM lParam)
 {
-  switch (updateMessage) {
+  switch (updateEvent) {
     case WM_DESTROY: {
       PostQuitMessage(0);
     } return 0;
@@ -18,7 +18,7 @@ LRESULT CALLBACK updateCallback(
     } return 0;
   }
 
-  return DefWindowProcW(windowHandle, updateMessage, wParam, lParam);
+  return DefWindowProcW(windowHandle, updateEvent, wParam, lParam);
 }
 
 WNDCLASSW createWindowClass(HINSTANCE* instanceHandle)
