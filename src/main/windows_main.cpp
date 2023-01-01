@@ -14,20 +14,22 @@ int CALLBACK WinMain(
     LPSTR commandLineArgs, int minimisedOption)
 {
   // Register window class.
-  // const wchar_t windowClassName[] = L"Fortesque";
+  // const char* windowClassName = "Fortesque";
+  LPCWSTR windowClassName = L"Fortesque";
 
-  WNDCLASSA windowClass {};
+  WNDCLASSW windowClass {};
   windowClass.lpfnWndProc = WindowProc;
   windowClass.hInstance = instanceHandle;
-  windowClass.lpszClassName = (LPCSTR) L"Fortesque";
+  // windowClass.lpszClassName = (LPCSTR) L"Fortesque";
+  windowClass.lpszClassName = windowClassName;
 
-  RegisterClassA(&windowClass);
+  RegisterClassW(&windowClass);
 
   // Create window.
-  HWND hwnd = CreateWindowExA(
+  HWND hwnd = CreateWindowExW(
     0,                           // Optional window styles.
-    (LPCSTR) L"Fortesque",             // Window class
-    (LPCSTR) L"Learn to Program Windows", // Window text
+    (LPCWSTR) L"Fortesque",             // Window class
+    (LPCWSTR) L"Learn to Program Windows", // Window text
     WS_OVERLAPPEDWINDOW,         // Window style
 
     // Size and position
