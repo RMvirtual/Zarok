@@ -55,6 +55,25 @@ void registerWindowClass(HINSTANCE* instanceHandle)
   RegisterClassW(&windowClass);
 }
 
+WindowValues mainWindowValues(HINSTANCE* instanceHandle)
+{
+  WindowValues result {};
+  result.behaviours = 0;
+  result.className = L"Zarok";
+  result.titleBar = L"Zarok";
+  result.style = WS_OVERLAPPEDWINDOW;
+  result.x = CW_USEDEFAULT;
+  result.y = CW_USEDEFAULT;
+  result.width = CW_USEDEFAULT;
+  result.height = CW_USEDEFAULT;
+  result.parentWindow = NULL;
+  result.menu = NULL;
+  result.instanceHandle = *instanceHandle;
+  result.arbitraryData = NULL;
+
+  return result;
+}
+
 HWND createWindow(HINSTANCE* instanceHandle)
 {
   registerWindowClass(instanceHandle);
@@ -72,6 +91,8 @@ HWND createWindow(HINSTANCE* instanceHandle)
     NULL                          // Additional application data
   );
 }
+
+
 
 void runEventLoop()
 {
