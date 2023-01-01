@@ -1,24 +1,22 @@
 #include <string>
 #include <windows.h>
-#include "events.cpp"
-
-struct WindowValues
-{
-  DWORD behaviours;
-  std::wstring className;
-  std::wstring titleBar;
-  DWORD style;
-  int x; int y; int width; int height;
-  HWND parentWindow;
-  HMENU menu;
-  HINSTANCE instanceHandle;
-  LPVOID arbitraryData;
-};
+#include "gui.h"
+#include "events.h"
 
 LRESULT CALLBACK updateCallback(
-  HWND windowHandle, UINT updateEvent, WPARAM wParam, LPARAM lParam)
+  HWND windowHandle, UINT eventType, WPARAM wParam, LPARAM lParam)
 {
-  switch (updateEvent) {
+  switch (eventType) {
+    case WM_CLOSE: {
+      auto quitPrompt = MessageBoxW(
+        windowHandle, L"Would you like to quit?", L"HMMM...", MB_OKCANCEL);
+
+      bool shouldQuit = quitPrompt == IDOK;
+
+      if (shouldQuit)
+        DestroyWindow(windowHandle);
+    } return 0;
+
     case WM_DESTROY: {
       PostQuitMessage(0);
     } return 0;
@@ -33,7 +31,7 @@ LRESULT CALLBACK updateCallback(
     } return 0;
   }
 
-  return DefWindowProcW(windowHandle, updateEvent, wParam, lParam);
+  return DefWindowProcW(windowHandle, eventType, wParam, lParam);
 }
 
 WNDCLASSW windowClass(HINSTANCE* instanceHandle)

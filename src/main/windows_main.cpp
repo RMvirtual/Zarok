@@ -1,6 +1,6 @@
+#pragma once
 #include <windows.h>
-#include "src/main/windows/gui.cpp"
-
+#include "windows/gui.h"
 
 /**
  * @brief Main entry point for the Windows API to launch from.
