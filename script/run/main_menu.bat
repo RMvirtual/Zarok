@@ -1,5 +1,5 @@
 @ECHO OFF
 CLS
 PUSHD w:\build
-simple_example.exe
+launch_main_menu.exe
 POPD

@@ -1,6 +1,6 @@
 #include <string>
 #include <windows.h>
-#include "gui.h"
+#include "main_menu.h"
 #include "events.h"
 
 LRESULT CALLBACK updateCallback(
