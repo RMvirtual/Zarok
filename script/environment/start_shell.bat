@@ -10,7 +10,7 @@ CALL visual_c_2019.bat
 GOTO COMPLETE
 
 :START_2022
-ALL visual_c_2022.bat
+CALL visual_c_2022.bat
 GOTO COMPLETE
 
 :COMPLETE
