@@ -24,7 +24,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     } return 0;
 
     default:
-      return DefWindowProc(m_hwnd, uMsg, wParam, lParam);
+      return DefWindowProcW(m_hwnd, uMsg, wParam, lParam);
   }
 
   return TRUE;

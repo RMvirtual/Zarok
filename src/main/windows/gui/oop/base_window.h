@@ -1,17 +1,19 @@
 #pragma once
+#include <string>
 #include <windows.h>
+
 
 template <class DERIVED_TYPE>
 class BaseWindow
 {
 public:
-  static LRESULT CALLBACK WindowProc(
+  static LRESULT CALLBACK updateCallback(
       HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   {
     DERIVED_TYPE *pThis = NULL;
 
     if (uMsg == WM_NCCREATE) {
-      CREATESTRUCT *pCreate = (CREATESTRUCT*) lParam;
+      CREATESTRUCT* pCreate = (CREATESTRUCT*) lParam;
       pThis = (DERIVED_TYPE*) pCreate->lpCreateParams;
       SetWindowLongPtrW(hwnd, GWLP_USERDATA, (LONG_PTR) pThis);
 
@@ -39,17 +41,18 @@ public:
     int nWidth = CW_USEDEFAULT, int nHeight = CW_USEDEFAULT,
     HWND hWndParent = 0, HMENU hMenu = 0)
   {
-    WNDCLASSW wc = {0};
+    WNDCLASSW wc {};
 
-    wc.lpfnWndProc = DERIVED_TYPE::WindowProc;
-    wc.hInstance = GetModuleHandle(NULL);
+    wc.lpfnWndProc = DERIVED_TYPE::updateCallback;
+    wc.hInstance = GetModuleHandleW(NULL);
     wc.lpszClassName = this->ClassName();
 
     RegisterClassW(&wc);
 
     m_hwnd = CreateWindowExW(
-        dwExStyle, this->ClassName(), lpWindowName, dwStyle, x, y,
-        nWidth, nHeight, hWndParent, hMenu, GetModuleHandleW(NULL), this);
+      dwExStyle, this->ClassName(), L"Zarok", dwStyle, x, y,
+      nWidth, nHeight, hWndParent, hMenu, GetModuleHandleW(NULL), this
+    );
 
     return (m_hwnd ? TRUE : FALSE);
   }
