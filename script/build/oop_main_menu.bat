@@ -7,7 +7,7 @@ PUSHD w:\build
 : exception handling, but need to look up if correct one.
 cl -Zi ^
     /I"w:\src\main" ^
-    w:\src\main\app\launch_main_menu.cpp ^
-    w:\src\main\windows\gui\main_menu.cpp ^
+    w:\src\main\app\launch_oop_main_menu.cpp ^
+    w:\src\main\windows\gui\oop\main_window.cpp ^
     user32.lib gdi32.lib /EHsc
 POPD
