@@ -2,7 +2,7 @@
 #include <d2d1.h>
 #pragma comment(lib, "d2d1")
 
-#include "src/main/windows/demo/gui/oop/base_window.h"
+#include "windows/demo/gui/oop/base_window.h"
 
 template <class T> void SafeRelease(T **ppT)
 {
@@ -120,29 +120,6 @@ void MainWindow::Resize()
         CalculateLayout();
         InvalidateRect(m_hwnd, NULL, FALSE);
     }
-}
-
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int nCmdShow)
-{
-    MainWindow win;
-
-    if (!win.Create(L"Circle", WS_OVERLAPPEDWINDOW))
-    {
-        return 0;
-    }
-
-    ShowWindow(win.Window(), nCmdShow);
-
-    // Run the message loop.
-
-    MSG msg = { };
-    while (GetMessage(&msg, NULL, 0, 0))
-    {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
-    }
-
-    return 0;
 }
 
 LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
