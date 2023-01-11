@@ -8,26 +8,26 @@ class BaseWindow
 {
 public:
   static LRESULT CALLBACK updateCallback(
-      HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+      HWND windowHandle, UINT eventType, WPARAM wParam, LPARAM lParam)
   {
     DERIVED_TYPE *pThis = NULL;
 
-    if (uMsg == WM_NCCREATE) {
+    if (eventType == WM_NCCREATE) {
       CREATESTRUCT* pCreate = (CREATESTRUCT*) lParam;
       pThis = (DERIVED_TYPE*) pCreate->lpCreateParams;
-      SetWindowLongPtrW(hwnd, GWLP_USERDATA, (LONG_PTR) pThis);
+      SetWindowLongPtrW(windowHandle, GWLP_USERDATA, (LONG_PTR) pThis);
 
-      pThis->m_hwnd = hwnd;
+      pThis->m_hwnd = windowHandle;
     }
 
     else
-      pThis = (DERIVED_TYPE*) GetWindowLongPtrW(hwnd, GWLP_USERDATA);
+      pThis = (DERIVED_TYPE*) GetWindowLongPtrW(windowHandle, GWLP_USERDATA);
 
     if (pThis)
-      return pThis->HandleMessage(uMsg, wParam, lParam);
+      return pThis->HandleMessage(eventType, wParam, lParam);
 
     else
-      return DefWindowProcW(hwnd, uMsg, wParam, lParam);
+      return DefWindowProcW(windowHandle, eventType, wParam, lParam);
   }
 
   BaseWindow() : m_hwnd(NULL)
