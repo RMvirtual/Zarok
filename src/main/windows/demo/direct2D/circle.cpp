@@ -96,12 +96,16 @@ void MainWindow::resize()
   if (pRenderTarget == NULL)
     return;
 
-  auto rectangle = this->rectangle();
-  D2D1_SIZE_U size = D2D1::SizeU(rectangle.right, rectangle.bottom);
-
-  pRenderTarget->Resize(size);
+  pRenderTarget->Resize(this->handleSize());
   this->calculateLayout();
   InvalidateRect(m_hwnd, NULL, FALSE);
+}
+
+D2D1_SIZE_U MainWindow::handleSize()
+{
+  auto rectangle = this->rectangle();
+  
+  return D2D1::SizeU(rectangle.right, rectangle.bottom);
 }
 
 RECT MainWindow::rectangle()
