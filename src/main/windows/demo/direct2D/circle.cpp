@@ -5,6 +5,17 @@
 #include "circle.h"
 #include "windows/demo/gui/oop/base_window.h"
 
+MainWindow::MainWindow() : pFactory(NULL), pRenderTarget(NULL), pBrush(NULL)
+{
+  // Pass.
+}
+
+PCWSTR MainWindow::ClassName() const
+{
+  return L"Circle Window Class";
+}
+
+
 template <class T>
 void SafeRelease(T **ppT)
 {
