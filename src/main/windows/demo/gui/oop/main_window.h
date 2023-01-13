@@ -4,6 +4,6 @@
 class MainWindow : public BaseWindow<MainWindow>
 {
 public:
-  LPCWSTR ClassName() const;
-  LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+  LPCWSTR className() const;
+  LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 };

@@ -8,13 +8,13 @@ class MainWindow : public BaseWindow<MainWindow>
 {
 public:
   MainWindow();
-  void CalculateLayout();
-  HRESULT CreateGraphicsResources();
-  void DiscardGraphicsResources();
-  void OnPaint();
-  void Resize();
-  LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-  PCWSTR ClassName() const;
+  void calculateLayout();
+  HRESULT createGraphicsResources();
+  void discardGraphicsResources();
+  void onPaint();
+  void resize();
+  LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+  PCWSTR className() const;
 
 private:
   ID2D1Factory *pFactory;

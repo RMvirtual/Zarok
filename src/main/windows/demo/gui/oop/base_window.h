@@ -24,7 +24,7 @@ public:
       pThis = (DERIVED_TYPE*) GetWindowLongPtrW(windowHandle, GWLP_USERDATA);
 
     if (pThis)
-      return pThis->HandleMessage(eventType, wParam, lParam);
+      return pThis->handleMessage(eventType, wParam, lParam);
 
     else
       return DefWindowProcW(windowHandle, eventType, wParam, lParam);
@@ -45,12 +45,12 @@ public:
 
     wc.lpfnWndProc = DERIVED_TYPE::updateCallback;
     wc.hInstance = GetModuleHandleW(NULL);
-    wc.lpszClassName = this->ClassName();
+    wc.lpszClassName = this->className();
 
     RegisterClassW(&wc);
 
     m_hwnd = CreateWindowExW(
-      dwExStyle, this->ClassName(), L"Zarok", dwStyle, x, y,
+      dwExStyle, this->className(), L"Zarok", dwStyle, x, y,
       nWidth, nHeight, hWndParent, hMenu, GetModuleHandleW(NULL), this
     );
 
@@ -63,8 +63,8 @@ public:
   }
 
 protected:
-  virtual LPCWSTR ClassName() const = 0;
-  virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
+  virtual LPCWSTR className() const = 0;
+  virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 
   HWND m_hwnd;
 };

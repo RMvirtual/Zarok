@@ -10,11 +10,10 @@ MainWindow::MainWindow() : pFactory(NULL), pRenderTarget(NULL), pBrush(NULL)
   // Pass.
 }
 
-PCWSTR MainWindow::ClassName() const
+PCWSTR MainWindow::className() const
 {
   return L"Circle Window Class";
 }
-
 
 template <class T>
 void SafeRelease(T **ppT)
@@ -25,7 +24,7 @@ void SafeRelease(T **ppT)
   }
 }
 
-void MainWindow::CalculateLayout()
+void MainWindow::calculateLayout()
 {
   if (pRenderTarget != NULL) {
     D2D1_SIZE_F size = pRenderTarget->GetSize();
@@ -36,7 +35,7 @@ void MainWindow::CalculateLayout()
   }
 }
 
-HRESULT MainWindow::CreateGraphicsResources()
+HRESULT MainWindow::createGraphicsResources()
 {
   HRESULT hr = S_OK;
 
@@ -57,22 +56,22 @@ HRESULT MainWindow::CreateGraphicsResources()
       hr = pRenderTarget->CreateSolidColorBrush(color, &pBrush);
 
       if (SUCCEEDED(hr))
-        CalculateLayout();
+        calculateLayout();
     }
   }
 
   return hr;
 }
 
-void MainWindow::DiscardGraphicsResources()
+void MainWindow::discardGraphicsResources()
 {
   SafeRelease(&pRenderTarget);
   SafeRelease(&pBrush);
 }
 
-void MainWindow::OnPaint()
+void MainWindow::onPaint()
 {
-  HRESULT hr = CreateGraphicsResources();
+  HRESULT hr = createGraphicsResources();
 
   if (SUCCEEDED(hr)) {
     PAINTSTRUCT ps;
@@ -86,13 +85,13 @@ void MainWindow::OnPaint()
     hr = pRenderTarget->EndDraw();
 
     if (FAILED(hr) || hr == D2DERR_RECREATE_TARGET)
-      DiscardGraphicsResources();
+      discardGraphicsResources();
 
     EndPaint(m_hwnd, &ps);
   }
 }
 
-void MainWindow::Resize()
+void MainWindow::resize()
 {
   if (pRenderTarget != NULL) {
     RECT rc;
@@ -101,12 +100,12 @@ void MainWindow::Resize()
     D2D1_SIZE_U size = D2D1::SizeU(rc.right, rc.bottom);
 
     pRenderTarget->Resize(size);
-    CalculateLayout();
+    calculateLayout();
     InvalidateRect(m_hwnd, NULL, FALSE);
   }
 }
 
-LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT MainWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   switch (uMsg) {
     case WM_CREATE:
@@ -116,19 +115,19 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
       return 0;
 
     case WM_DESTROY:
-      DiscardGraphicsResources();
+      discardGraphicsResources();
       SafeRelease(&pFactory);
       PostQuitMessage(0);
 
       return 0;
 
     case WM_PAINT:
-      OnPaint();
+      onPaint();
 
       return 0;
 
     case WM_SIZE:
-      Resize();
+      resize();
 
       return 0;
   }

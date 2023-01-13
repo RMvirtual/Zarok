@@ -2,12 +2,12 @@
 #include "main_window.h"
 
 
-LPCWSTR MainWindow::ClassName() const
+LPCWSTR MainWindow::className() const
 {
   return L"Sample Window Class";
 }
 
-LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT MainWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   switch (uMsg) {
     case WM_DESTROY:
