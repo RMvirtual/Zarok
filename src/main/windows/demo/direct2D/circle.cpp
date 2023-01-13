@@ -96,14 +96,20 @@ void MainWindow::resize()
   if (pRenderTarget == NULL)
     return;
 
-  RECT rc;
-  GetClientRect(m_hwnd, &rc);
-
-  D2D1_SIZE_U size = D2D1::SizeU(rc.right, rc.bottom);
+  auto rectangle = this->rectangle();
+  D2D1_SIZE_U size = D2D1::SizeU(rectangle.right, rectangle.bottom);
 
   pRenderTarget->Resize(size);
-  calculateLayout();
+  this->calculateLayout();
   InvalidateRect(m_hwnd, NULL, FALSE);
+}
+
+RECT MainWindow::rectangle()
+{
+  RECT result;
+  GetClientRect(m_hwnd, &result);
+
+  return result;
 }
 
 LRESULT MainWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)

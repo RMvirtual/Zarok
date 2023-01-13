@@ -22,4 +22,6 @@ private:
   ID2D1SolidColorBrush *pBrush;
   D2D1_ELLIPSE ellipse;
 
+  RECT rectangle();
+
 };
