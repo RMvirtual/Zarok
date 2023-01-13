@@ -93,16 +93,17 @@ void MainWindow::onPaint()
 
 void MainWindow::resize()
 {
-  if (pRenderTarget != NULL) {
-    RECT rc;
-    GetClientRect(m_hwnd, &rc);
+  if (pRenderTarget == NULL)
+    return;
 
-    D2D1_SIZE_U size = D2D1::SizeU(rc.right, rc.bottom);
+  RECT rc;
+  GetClientRect(m_hwnd, &rc);
 
-    pRenderTarget->Resize(size);
-    calculateLayout();
-    InvalidateRect(m_hwnd, NULL, FALSE);
-  }
+  D2D1_SIZE_U size = D2D1::SizeU(rc.right, rc.bottom);
+
+  pRenderTarget->Resize(size);
+  calculateLayout();
+  InvalidateRect(m_hwnd, NULL, FALSE);
 }
 
 LRESULT MainWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
