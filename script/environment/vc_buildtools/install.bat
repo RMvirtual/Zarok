@@ -1,5 +1,7 @@
-@ECHO OFF
+PUSHD w:\lib\msvc
 
-PUSHD w:\lib\MSVC
-vs_BuildTools.exe 
+vs_BuildTools.exe --installPath w:\build\msvc ^
+ --add --includeOptional Microsoft.VisualStudio.Workload.VCTools  ^
+ --norestart --passive --wait
+
 POPD
