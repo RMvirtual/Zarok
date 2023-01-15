@@ -1,4 +1,4 @@
 @ECHO OFF
 PUSHD environment
-START start_shell.bat %1
+START start_shell.bat
 POPD
