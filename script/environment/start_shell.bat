@@ -1,16 +1,16 @@
 @ECHO OFF
 CALL set_working_directory.bat
 
-IF "%1%"=="" GOTO START_2019
-IF "%1%"=="2019" GOTO START_2019
+IF "%1%"=="" GOTO START_2022
 IF "%1%"=="2022" GOTO START_2022
+IF "%1%"=="2019" GOTO START_2019
 
 :START_2019
-CALL visual_c_2019.bat
+CALL vc_build_tools_2019.bat
 GOTO COMPLETE
 
 :START_2022
-CALL visual_c_2022.bat
+CALL vc_build_tools_2022.bat
 GOTO COMPLETE
 
 :COMPLETE
