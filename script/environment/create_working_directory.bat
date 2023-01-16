@@ -1,8 +1,11 @@
 @ECHO OFF
 
-: Clear W: drive if in use.
-IF EXIST w:\ SUBST w: /D
+REM Clear W: drive if in use.
+IF EXIST w:\ SUBST w: /d
 
-: Create W: drive path for root directory (hardcoded to 2x levels up).
+REM Create W: drive path for root directory (hardcoded to 2x levels up).
 SUBST w: ..\..
-SET PATH=w:%path%
+
+REM Possible issue here with batch script getting confused about
+REM W's root directory location.
+: SET PATH=w:%path%
