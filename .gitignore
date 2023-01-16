@@ -35,4 +35,5 @@
 *.ilk
 *.pdb
 
+build/**
 !lib/**

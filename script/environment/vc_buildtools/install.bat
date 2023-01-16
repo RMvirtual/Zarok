@@ -1,9 +1,10 @@
+MD "W:\build"
+MD "W:\build\MSVC"
 PUSHD "W:\lib\msvc"
+
 vs_BuildTools.exe --installPath "w:\build\MSVC" ^
 --add Microsoft.VisualStudio.Workload.VCTools ^
---quiet
-
-DIR w:\build\MSVC
+--passive --wait
 
 IF %ERRORLEVEL% NEQ 0 ECHO "ERROR LEVEL: " %ERRORLEVEL%
 POPD
