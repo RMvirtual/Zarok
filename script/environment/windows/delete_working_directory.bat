@@ -1,0 +1,1 @@
+IF EXIST w:\ SUBST w: /d
