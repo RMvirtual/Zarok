@@ -1,2 +1,2 @@
-CALL create_working_directory.bat
-CALL vc_buildtools\install_ide.bat
+CALL "windows\create_working_directory.bat" %root_directory%
+CALL "W:\script\environment\vs_community\admin_install.bat"

@@ -1,3 +1,4 @@
+cd %root_directory%\script\environment\windows\create_working_directory.bat
 PUSHD "w:\ide"
 
 "vs_Community.exe" --config "w:\ide\.vsconfig" --passive --wait --force
