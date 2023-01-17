@@ -1,7 +1,6 @@
+CLS
 @ECHO OFF
-SET root_directory=%CD%
-ECHO %root_directory%
 
-PUSHD script\environment
-CALL setup.bat
-POPD
+CALL script\environment\windows\set_working_directory.bat %CD%
+CD /d w:\
+CALL "w:\script\environment\setup.bat"

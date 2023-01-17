@@ -1,0 +1,1 @@
+IF NOT EXIST "W:\build\MSVC" MD "W:\build\MSVC"
