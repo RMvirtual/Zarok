@@ -1,7 +1,7 @@
-#include <atlbase.h>
-#include <windows.h>
-#include <D2d1.h>
 #include <assert.h>
+#include <atlbase.h>
+#include <D2d1.h>
+#include <windows.h>
 
 #pragma comment(lib, "d2d1")
 

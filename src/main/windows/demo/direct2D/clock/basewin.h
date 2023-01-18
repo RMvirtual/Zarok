@@ -29,7 +29,7 @@ public:
     }
     else
     {
-      return DefWindowProc(hwnd, uMsg, wParam, lParam);
+      return DefWindowProcW(hwnd, uMsg, wParam, lParam);
     }
   }
 
@@ -46,15 +46,15 @@ public:
       HWND hWndParent = 0,
       HMENU hMenu = 0)
   {
-    WNDCLASS wc = {0};
+    WNDCLASSW wc = {0};
 
     wc.lpfnWndProc = DERIVED_TYPE::WindowProc;
     wc.hInstance = GetModuleHandle(NULL);
     wc.lpszClassName = ClassName();
 
-    RegisterClass(&wc);
+    RegisterClassW(&wc);
 
-    m_hwnd = CreateWindowEx(
+    m_hwnd = CreateWindowExW(
         dwExStyle, ClassName(), lpWindowName, dwStyle, x, y,
         nWidth, nHeight, hWndParent, hMenu, GetModuleHandle(NULL), this);
 

@@ -1,7 +1,7 @@
 #pragma once
-#include <windows.h>
-#include <D2d1.h>
 #include <assert.h>
+#include <D2d1.h>
+#include <windows.h>
 
 
 class GraphicsScene
