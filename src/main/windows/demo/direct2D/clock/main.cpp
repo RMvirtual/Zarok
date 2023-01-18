@@ -28,14 +28,14 @@ class Scene : public GraphicsScene
 
 HRESULT Scene::CreateDeviceDependentResources()
 {
-    HRESULT hr = m_pRenderTarget->CreateSolidColorBrush(
+    HRESULT hr = renderTarget->CreateSolidColorBrush(
         D2D1::ColorF(1.0f, 1.0f, 0),
         D2D1::BrushProperties(),
         &m_pFill);
 
     if (SUCCEEDED(hr))
     {
-        hr = m_pRenderTarget->CreateSolidColorBrush(
+        hr = renderTarget->CreateSolidColorBrush(
             D2D1::ColorF(0, 0, 0),
             D2D1::BrushProperties(),
             &m_pStroke);
@@ -45,7 +45,7 @@ HRESULT Scene::CreateDeviceDependentResources()
 
 void Scene::DrawClockHand(float fHandLength, float fAngle, float fStrokeWidth)
 {
-    m_pRenderTarget->SetTransform(
+    renderTarget->SetTransform(
         D2D1::Matrix3x2F::Rotation(fAngle, m_ellipse.point));
 
     // endPoint defines one end of the hand.
@@ -54,21 +54,21 @@ void Scene::DrawClockHand(float fHandLength, float fAngle, float fStrokeWidth)
         m_ellipse.point.y - (m_ellipse.radiusY * fHandLength));
 
     // Draw a line from the center of the ellipse to endPoint.
-    m_pRenderTarget->DrawLine(
+    renderTarget->DrawLine(
         m_ellipse.point, endPoint, m_pStroke, fStrokeWidth);
 }
 
 void Scene::RenderScene()
 {
-    m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::SkyBlue));
+    renderTarget->Clear(D2D1::ColorF(D2D1::ColorF::SkyBlue));
 
-    m_pRenderTarget->FillEllipse(m_ellipse, m_pFill);
-    m_pRenderTarget->DrawEllipse(m_ellipse, m_pStroke);
+    renderTarget->FillEllipse(m_ellipse, m_pFill);
+    renderTarget->DrawEllipse(m_ellipse, m_pStroke);
 
     // Draw tick marks
     for (DWORD i = 0; i < 12; i++)
     {
-        m_pRenderTarget->DrawLine(m_Ticks[i * 2], m_Ticks[i * 2 + 1], m_pStroke, 2.0f);
+        renderTarget->DrawLine(m_Ticks[i * 2], m_Ticks[i * 2 + 1], m_pStroke, 2.0f);
     }
 
     // Draw hands
@@ -87,12 +87,12 @@ void Scene::RenderScene()
     DrawClockHand(0.85f, fSecondAngle, 1);
 
     // Restore the identity transformation.
-    m_pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+    renderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 }
 
 void Scene::CalculateLayout()
 {
-    D2D1_SIZE_F fSize = m_pRenderTarget->GetSize();
+    D2D1_SIZE_F fSize = renderTarget->GetSize();
 
     const float x = fSize.width / 2.0f;
     const float y = fSize.height / 2.0f;
