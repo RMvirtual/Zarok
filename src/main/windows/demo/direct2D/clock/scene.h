@@ -24,43 +24,42 @@ protected:
   virtual void RenderScene() = 0;
 
 protected:
-  HRESULT CreateGraphicsResources(HWND hwnd)
+  HRESULT CreateGraphicsResources(HWND windowHandle)
   {
-    HRESULT hr = S_OK;
+    HRESULT result = S_OK;
 
     if (this->renderTarget == NULL) {
-      RECT rc;
-      GetClientRect(hwnd, &rc);
+      RECT rectangle;
+      GetClientRect(windowHandle, &rectangle);
 
-      D2D1_SIZE_U size = D2D1::SizeU(rc.right, rc.bottom);
+      D2D1_SIZE_U size = D2D1::SizeU(rectangle.right, rectangle.bottom);
 
-      hr = direct2DFactory->CreateHwndRenderTarget(
+      result = direct2DFactory->CreateHwndRenderTarget(
         D2D1::RenderTargetProperties(),
-        D2D1::HwndRenderTargetProperties(hwnd, size),
+        D2D1::HwndRenderTargetProperties(windowHandle, size),
         &this->renderTarget
       );
 
-      if (SUCCEEDED(hr))
-        hr = CreateDeviceDependentResources();
+      if (SUCCEEDED(result))
+        result = CreateDeviceDependentResources();
 
-      if (SUCCEEDED(hr))
+      if (SUCCEEDED(result))
         CalculateLayout();
-
     }
 
-    return hr;
+    return result;
   }
 
   template <class T>
   T PixelToDipX(T pixels) const
   {
-    return static_cast<T>(pixels / scaleX);
+    return static_cast<T>(pixels / this->scaleX);
   }
 
   template <class T>
   T PixelToDipY(T pixels) const
   {
-    return static_cast<T>(pixels / scaleY);
+    return static_cast<T>(pixels / this->scaleY);
   }
 
 public:
@@ -75,32 +74,32 @@ public:
 
   }
 
-  HRESULT Initialize()
+  HRESULT initialise()
   {
-    HRESULT hr = D2D1CreateFactory(
+    HRESULT result = D2D1CreateFactory(
       D2D1_FACTORY_TYPE_SINGLE_THREADED, &direct2DFactory);
 
-    if (SUCCEEDED(hr))
+    if (SUCCEEDED(result))
       CreateDeviceIndependentResources();
 
-    return hr;
+    return result;
   }
 
-  void Render(HWND hwnd)
+  void render(HWND windowHandle)
   {
-    HRESULT hr = CreateGraphicsResources(hwnd);
+    HRESULT result = CreateGraphicsResources(windowHandle);
 
-    if (FAILED(hr))
+    if (FAILED(result))
       return;
 
-    assert(renderTarget != NULL);
+    assert(this->renderTarget != NULL);
     renderTarget->BeginDraw();
 
     RenderScene();
 
-    hr = renderTarget->EndDraw();
+    result = renderTarget->EndDraw();
 
-    if (hr == D2DERR_RECREATE_TARGET) {
+    if (result == D2DERR_RECREATE_TARGET) {
       DiscardDeviceDependentResources();
       renderTarget.Release();
     }

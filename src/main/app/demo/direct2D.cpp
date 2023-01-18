@@ -6,10 +6,10 @@ int CALLBACK WinMain(
 {
     MainWindow win;
 
-    if (!win.Create(L"Circle", WS_OVERLAPPEDWINDOW))
+    if (!win.create(L"Circle", WS_OVERLAPPEDWINDOW))
         return 0;
 
-    ShowWindow(win.Window(), nCmdShow);
+    ShowWindow(win.window(), nCmdShow);
 
     // Run the message loop.
 

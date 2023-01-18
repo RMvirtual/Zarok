@@ -30,12 +30,12 @@ public:
       return DefWindowProcW(windowHandle, eventType, wParam, lParam);
   }
 
-  BaseWindow() : m_hwnd(NULL)
+  BaseWindow() : windowHandle(NULL)
   {
     // pass.
   }
 
-  BOOL Create(
+  BOOL create(
     PCWSTR lpWindowName, DWORD dwStyle, DWORD dwExStyle = 0,
     int x = CW_USEDEFAULT, int y = CW_USEDEFAULT,
     int nWidth = CW_USEDEFAULT, int nHeight = CW_USEDEFAULT,
@@ -49,22 +49,22 @@ public:
 
     RegisterClassW(&wc);
 
-    m_hwnd = CreateWindowExW(
+    windowHandle = CreateWindowExW(
       dwExStyle, this->className(), L"Zarok", dwStyle, x, y,
       nWidth, nHeight, hWndParent, hMenu, GetModuleHandleW(NULL), this
     );
 
-    return (m_hwnd ? TRUE : FALSE);
+    return (windowHandle ? TRUE : FALSE);
   }
 
-  HWND Window() const
+  HWND window() const
   {
-    return m_hwnd;
+    return windowHandle;
   }
 
 protected:
   virtual LPCWSTR className() const = 0;
   virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 
-  HWND m_hwnd;
+  HWND windowHandle;
 };

@@ -18,13 +18,13 @@ LRESULT MainWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_PAINT:
     {
       PAINTSTRUCT ps;
-      HDC hdc = BeginPaint(m_hwnd, &ps);
+      HDC hdc = BeginPaint(windowHandle, &ps);
       FillRect(hdc, &ps.rcPaint, (HBRUSH) (COLOR_WINDOW+1));
-      EndPaint(m_hwnd, &ps);
+      EndPaint(windowHandle, &ps);
     } return 0;
 
     default:
-      return DefWindowProcW(m_hwnd, uMsg, wParam, lParam);
+      return DefWindowProcW(windowHandle, uMsg, wParam, lParam);
   }
 
   return TRUE;

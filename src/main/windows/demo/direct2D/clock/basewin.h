@@ -17,14 +17,14 @@ public:
       pThis = (DERIVED_TYPE*) pCreate->lpCreateParams;
       SetWindowLongPtr(windowHandle, GWLP_USERDATA, (LONG_PTR) pThis);
 
-      pThis->m_hwnd = windowHandle;
+      pThis->windowHandle = windowHandle;
     }
 
     else
       pThis = (DERIVED_TYPE*) GetWindowLongPtr(windowHandle, GWLP_USERDATA);
 
     if (pThis)
-      return pThis->HandleMessage(eventType, wParam, lParam);
+      return pThis->handleMessage(eventType, wParam, lParam);
 
     else
       return DefWindowProcW(windowHandle, eventType, wParam, lParam);
@@ -32,10 +32,10 @@ public:
 
   BaseWindow()
   {
-    this->m_hwnd = NULL;
+    this->windowHandle = NULL;
   }
 
-  BOOL Create(
+  BOOL create(
     PCWSTR lpWindowName, DWORD dwStyle, DWORD dwExStyle = 0,
     int x = CW_USEDEFAULT, int y = CW_USEDEFAULT,
     int nWidth = CW_USEDEFAULT, int nHeight = CW_USEDEFAULT,
@@ -45,26 +45,26 @@ public:
 
     windowClass.lpfnWndProc = DERIVED_TYPE::windowCallback;
     windowClass.hInstance = GetModuleHandle(NULL);
-    windowClass.lpszClassName = this->ClassName();
+    windowClass.lpszClassName = this->className();
 
     RegisterClassW(&windowClass);
 
-    this->m_hwnd = CreateWindowExW(
-      dwExStyle, ClassName(), lpWindowName, dwStyle, x, y,
+    this->windowHandle = CreateWindowExW(
+      dwExStyle, className(), lpWindowName, dwStyle, x, y,
       nWidth, nHeight, hWndParent, hMenu, GetModuleHandleW(NULL), this
     );
 
-    return (this->m_hwnd ? TRUE : FALSE);
+    return (this->windowHandle ? TRUE : FALSE);
   }
 
-  HWND Window() const
+  HWND window() const
   {
-    return this->m_hwnd;
+    return this->windowHandle;
   }
 
 protected:
-  virtual PCWSTR ClassName() const = 0;
-  virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
+  virtual PCWSTR className() const = 0;
+  virtual LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 
-  HWND m_hwnd;
+  HWND windowHandle;
 };

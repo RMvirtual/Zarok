@@ -7,10 +7,10 @@ int CALLBACK WinMain(
 {
     MainWindow win;
 
-    if (!win.Create(L"Learn to Program Windows", WS_OVERLAPPEDWINDOW))
+    if (!win.create(L"Learn to Program Windows", WS_OVERLAPPEDWINDOW))
       return 0;
 
-    ShowWindow(win.Window(), nCmdShow);
+    ShowWindow(win.window(), nCmdShow);
 
     MSG msg = {};
 

@@ -7,7 +7,8 @@
 	"settings": {
 		"files.associations": {
 			"string": "cpp",
-			"xstring": "cpp"
+			"xstring": "cpp",
+			"*.rh": "cpp"
 		}
 	}
 }

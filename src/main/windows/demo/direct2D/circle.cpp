@@ -41,13 +41,13 @@ HRESULT MainWindow::createGraphicsResources()
 
   if (pRenderTarget == NULL) {
     RECT rc;
-    GetClientRect(m_hwnd, &rc);
+    GetClientRect(windowHandle, &rc);
 
     D2D1_SIZE_U size = D2D1::SizeU(rc.right, rc.bottom);
 
     hr = pFactory->CreateHwndRenderTarget(
       D2D1::RenderTargetProperties(),
-      D2D1::HwndRenderTargetProperties(m_hwnd, size),
+      D2D1::HwndRenderTargetProperties(windowHandle, size),
       &pRenderTarget
     );
 
@@ -75,7 +75,7 @@ void MainWindow::onPaint()
 
   if (SUCCEEDED(hr)) {
     PAINTSTRUCT ps;
-    BeginPaint(m_hwnd, &ps);
+    BeginPaint(windowHandle, &ps);
 
     pRenderTarget->BeginDraw();
 
@@ -87,7 +87,7 @@ void MainWindow::onPaint()
     if (FAILED(hr) || hr == D2DERR_RECREATE_TARGET)
       discardGraphicsResources();
 
-    EndPaint(m_hwnd, &ps);
+    EndPaint(windowHandle, &ps);
   }
 }
 
@@ -98,7 +98,7 @@ void MainWindow::resize()
 
   pRenderTarget->Resize(this->handleSize());
   this->calculateLayout();
-  InvalidateRect(m_hwnd, NULL, FALSE);
+  InvalidateRect(windowHandle, NULL, FALSE);
 }
 
 D2D1_SIZE_U MainWindow::handleSize()
@@ -111,7 +111,7 @@ D2D1_SIZE_U MainWindow::handleSize()
 RECT MainWindow::rectangle()
 {
   RECT result;
-  GetClientRect(m_hwnd, &result);
+  GetClientRect(windowHandle, &result);
 
   return result;
 }
@@ -143,5 +143,5 @@ LRESULT MainWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
       return 0;
   }
 
-  return DefWindowProcW(m_hwnd, uMsg, wParam, lParam);
+  return DefWindowProcW(windowHandle, uMsg, wParam, lParam);
 }

@@ -140,8 +140,8 @@ public:
 
     void WaitTimer();
 
-    PCWSTR ClassName() const { return L"Clock Window Class"; }
-    LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    PCWSTR className() const { return L"Clock Window Class"; }
+    LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
 // Constants
@@ -156,12 +156,12 @@ INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, INT nCmdShow)
 
     MainWindow win;
 
-    if (!win.Create(WINDOW_NAME, WS_OVERLAPPEDWINDOW))
+    if (!win.create(WINDOW_NAME, WS_OVERLAPPEDWINDOW))
     {
         return 0;
     }
 
-    ShowWindow(win.Window(), nCmdShow);
+    ShowWindow(win.window(), nCmdShow);
 
     // Run the message loop.
 
@@ -181,14 +181,14 @@ INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, INT nCmdShow)
     return 0;
 }
 
-LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT MainWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    HWND hwnd = m_hwnd;
+    HWND hwnd = windowHandle;
 
     switch (uMsg)
     {
     case WM_CREATE:
-        if (FAILED(m_scene.Initialize()) || !InitializeTimer())
+        if (FAILED(m_scene.initialise()) || !InitializeTimer())
         {
             return -1;
         }
@@ -204,9 +204,9 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_DISPLAYCHANGE:
     {
         PAINTSTRUCT ps;
-        BeginPaint(m_hwnd, &ps);
-        m_scene.Render(m_hwnd);
-        EndPaint(m_hwnd, &ps);
+        BeginPaint(windowHandle, &ps);
+        m_scene.render(windowHandle);
+        EndPaint(windowHandle, &ps);
     }
         return 0;
 
@@ -215,7 +215,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         int x = (int)(short)LOWORD(lParam);
         int y = (int)(short)HIWORD(lParam);
         m_scene.Resize(x, y);
-        InvalidateRect(m_hwnd, NULL, FALSE);
+        InvalidateRect(windowHandle, NULL, FALSE);
     }
         return 0;
 
@@ -252,6 +252,6 @@ void MainWindow::WaitTimer()
     // Wait until the timer expires or any message is posted.
     if (MsgWaitForMultipleObjects(1, &m_hTimer, FALSE, INFINITE, QS_ALLINPUT) == WAIT_OBJECT_0)
     {
-        InvalidateRect(m_hwnd, NULL, FALSE);
+        InvalidateRect(windowHandle, NULL, FALSE);
     }
 }
