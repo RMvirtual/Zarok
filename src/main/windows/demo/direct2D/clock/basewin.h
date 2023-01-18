@@ -50,7 +50,7 @@ public:
     RegisterClassW(&windowClass);
 
     this->windowHandle = CreateWindowExW(
-      dwExStyle, className(), lpWindowName, dwStyle, x, y,
+      dwExStyle, this->className(), lpWindowName, dwStyle, x, y,
       nWidth, nHeight, hWndParent, hMenu, GetModuleHandleW(NULL), this
     );
 
