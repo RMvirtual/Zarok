@@ -1,6 +1,6 @@
-#include <windows.h>
-#include <D2d1.h>
 #include <assert.h>
+#include <D2d1.h>
+#include <windows.h>
 
 
 template <class DERIVED_TYPE>
@@ -11,40 +11,34 @@ public:
   {
     DERIVED_TYPE *pThis = NULL;
 
-    if (uMsg == WM_NCCREATE)
-    {
+    if (uMsg == WM_NCCREATE) {
       CREATESTRUCT *pCreate = (CREATESTRUCT *)lParam;
       pThis = (DERIVED_TYPE *)pCreate->lpCreateParams;
       SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)pThis);
 
       pThis->m_hwnd = hwnd;
     }
+
     else
-    {
       pThis = (DERIVED_TYPE *)GetWindowLongPtr(hwnd, GWLP_USERDATA);
-    }
+
     if (pThis)
-    {
       return pThis->HandleMessage(uMsg, wParam, lParam);
-    }
+
     else
-    {
       return DefWindowProcW(hwnd, uMsg, wParam, lParam);
-    }
   }
 
-  BaseWindow() : m_hwnd(NULL) {}
+  BaseWindow() : m_hwnd(NULL)
+  {
+    // Pass.
+  }
 
   BOOL Create(
-      PCWSTR lpWindowName,
-      DWORD dwStyle,
-      DWORD dwExStyle = 0,
-      int x = CW_USEDEFAULT,
-      int y = CW_USEDEFAULT,
-      int nWidth = CW_USEDEFAULT,
-      int nHeight = CW_USEDEFAULT,
-      HWND hWndParent = 0,
-      HMENU hMenu = 0)
+    PCWSTR lpWindowName, DWORD dwStyle, DWORD dwExStyle = 0,
+    int x = CW_USEDEFAULT, int y = CW_USEDEFAULT,
+    int nWidth = CW_USEDEFAULT, int nHeight = CW_USEDEFAULT,
+    HWND hWndParent = 0, HMENU hMenu = 0)
   {
     WNDCLASSW wc = {0};
 
@@ -54,14 +48,17 @@ public:
 
     RegisterClassW(&wc);
 
-    m_hwnd = CreateWindowExW(
+    this->m_hwnd = CreateWindowExW(
         dwExStyle, ClassName(), lpWindowName, dwStyle, x, y,
         nWidth, nHeight, hWndParent, hMenu, GetModuleHandle(NULL), this);
 
-    return (m_hwnd ? TRUE : FALSE);
+    return (this->m_hwnd ? TRUE : FALSE);
   }
 
-  HWND Window() const { return m_hwnd; }
+  HWND Window() const
+  {
+    return this->m_hwnd;
+  }
 
 protected:
   virtual PCWSTR ClassName() const = 0;
