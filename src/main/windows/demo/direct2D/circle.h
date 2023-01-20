@@ -28,4 +28,5 @@ private:
   D2D1_ELLIPSE generateEllipse();
   D2D1_POINT_2F centreCoordinates();
   HRESULT initialiseRenderTarget();
+  HRESULT initialiseBrush();
 };

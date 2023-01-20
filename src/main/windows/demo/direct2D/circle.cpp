@@ -32,7 +32,7 @@ void MainWindow::calculateLayout()
 
 D2D1_ELLIPSE MainWindow::generateEllipse()
 {
-  auto coordinates = this->centreCoordinates();
+  const auto coordinates = this->centreCoordinates();
   const float radius = min(coordinates.x, coordinates.y);
   
   return D2D1::Ellipse(coordinates, radius, radius);
@@ -53,8 +53,7 @@ HRESULT MainWindow::createGraphicsResources()
     result = this->initialiseRenderTarget();
 
     if (SUCCEEDED(result)) {
-      const D2D1_COLOR_F color = D2D1::ColorF(1.0f, 1.0f, 0);
-      result = this->renderTarget->CreateSolidColorBrush(color, &brush);
+      result = this->initialiseBrush();
 
       if (SUCCEEDED(result))
         this->calculateLayout();
@@ -64,12 +63,17 @@ HRESULT MainWindow::createGraphicsResources()
   return result;
 }
 
+HRESULT MainWindow::initialiseBrush()
+{
+  const auto color = D2D1::ColorF(1.0f, 1.0f, 0);
+  
+  return this->renderTarget->CreateSolidColorBrush(color, &this->brush);
+}
+
 HRESULT MainWindow::initialiseRenderTarget()
 {
-  RECT rc;
-  GetClientRect(this->windowHandle, &rc);
-
-  auto size = D2D1::SizeU(rc.right, rc.bottom);
+  auto rectangle = this->rectangle();
+  auto size = D2D1::SizeU(rectangle.right, rectangle.bottom);
 
   return this->direct2DFactory->CreateHwndRenderTarget(
     D2D1::RenderTargetProperties(),
