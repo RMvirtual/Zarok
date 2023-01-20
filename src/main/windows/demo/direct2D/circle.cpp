@@ -90,9 +90,9 @@ void MainWindow::discardGraphicsResources()
 
 void MainWindow::onPaint()
 {
-  HRESULT hr = this->createGraphicsResources();
+  HRESULT result = this->createGraphicsResources();
 
-  if (SUCCEEDED(hr)) {
+  if (SUCCEEDED(result)) {
     PAINTSTRUCT ps;
     BeginPaint(this->windowHandle, &ps);
 
@@ -100,9 +100,9 @@ void MainWindow::onPaint()
     this->renderTarget->Clear(D2D1::ColorF(D2D1::ColorF::SkyBlue));
     this->renderTarget->FillEllipse(ellipse, brush);
 
-    hr = renderTarget->EndDraw();
+    result = renderTarget->EndDraw();
 
-    if (FAILED(hr) || hr == D2DERR_RECREATE_TARGET)
+    if (FAILED(result) || result == D2DERR_RECREATE_TARGET)
       this->discardGraphicsResources();
 
     EndPaint(this->windowHandle, &ps);
