@@ -18,13 +18,14 @@ public:
   PCWSTR className() const;
 
 private:
-  ID2D1Factory* pFactory;
-  ID2D1HwndRenderTarget* pRenderTarget;
-  ID2D1SolidColorBrush* pBrush;
+  ID2D1Factory* direct2DFactory;
+  ID2D1HwndRenderTarget* renderTarget;
+  ID2D1SolidColorBrush* brush;
   D2D1_ELLIPSE ellipse;
 
   D2D1_SIZE_U handleSize();
   RECT rectangle();
   D2D1_ELLIPSE generateEllipse();
   D2D1_POINT_2F centreCoordinates();
+  HRESULT initialiseRenderTarget();
 };

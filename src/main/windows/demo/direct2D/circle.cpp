@@ -5,7 +5,7 @@
 #include "circle.h"
 #include "windows/demo/gui/oop/base_window.h"
 
-MainWindow::MainWindow() : pFactory(NULL), pRenderTarget(NULL), pBrush(NULL)
+MainWindow::MainWindow() : direct2DFactory(NULL), renderTarget(NULL), brush(NULL)
 {
   // Pass.
 }
@@ -26,7 +26,7 @@ void SafeRelease(T **ppT)
 
 void MainWindow::calculateLayout()
 {
-  if (this->pRenderTarget != NULL)
+  if (this->renderTarget != NULL)
     this->ellipse = this->generateEllipse();
 }
 
@@ -40,7 +40,7 @@ D2D1_ELLIPSE MainWindow::generateEllipse()
 
 D2D1_POINT_2F MainWindow::centreCoordinates()
 {
-  auto size = this->pRenderTarget->GetSize();
+  auto size = this->renderTarget->GetSize();
 
   return D2D1::Point2F(size.width / 2, size.height / 2);
 }
@@ -49,21 +49,12 @@ HRESULT MainWindow::createGraphicsResources()
 {
   HRESULT result = S_OK;
 
-  if (this->pRenderTarget == NULL) {
-    RECT rc;
-    GetClientRect(this->windowHandle, &rc);
-
-    D2D1_SIZE_U size = D2D1::SizeU(rc.right, rc.bottom);
-
-    result = this->pFactory->CreateHwndRenderTarget(
-      D2D1::RenderTargetProperties(),
-      D2D1::HwndRenderTargetProperties(this->windowHandle, size),
-      &this->pRenderTarget
-    );
+  if (this->renderTarget == NULL) {
+    result = this->initialiseRenderTarget();
 
     if (SUCCEEDED(result)) {
       const D2D1_COLOR_F color = D2D1::ColorF(1.0f, 1.0f, 0);
-      result = this->pRenderTarget->CreateSolidColorBrush(color, &pBrush);
+      result = this->renderTarget->CreateSolidColorBrush(color, &brush);
 
       if (SUCCEEDED(result))
         this->calculateLayout();
@@ -73,10 +64,24 @@ HRESULT MainWindow::createGraphicsResources()
   return result;
 }
 
+HRESULT MainWindow::initialiseRenderTarget()
+{
+  RECT rc;
+  GetClientRect(this->windowHandle, &rc);
+
+  auto size = D2D1::SizeU(rc.right, rc.bottom);
+
+  return this->direct2DFactory->CreateHwndRenderTarget(
+    D2D1::RenderTargetProperties(),
+    D2D1::HwndRenderTargetProperties(this->windowHandle, size),
+    &this->renderTarget
+  );
+}
+
 void MainWindow::discardGraphicsResources()
 {
-  SafeRelease(&pRenderTarget);
-  SafeRelease(&pBrush);
+  SafeRelease(&this->renderTarget);
+  SafeRelease(&this->brush);
 }
 
 void MainWindow::onPaint()
@@ -87,11 +92,11 @@ void MainWindow::onPaint()
     PAINTSTRUCT ps;
     BeginPaint(this->windowHandle, &ps);
 
-    this->pRenderTarget->BeginDraw();
-    this->pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::SkyBlue));
-    this->pRenderTarget->FillEllipse(ellipse, pBrush);
+    this->renderTarget->BeginDraw();
+    this->renderTarget->Clear(D2D1::ColorF(D2D1::ColorF::SkyBlue));
+    this->renderTarget->FillEllipse(ellipse, brush);
 
-    hr = pRenderTarget->EndDraw();
+    hr = renderTarget->EndDraw();
 
     if (FAILED(hr) || hr == D2DERR_RECREATE_TARGET)
       this->discardGraphicsResources();
@@ -102,10 +107,10 @@ void MainWindow::onPaint()
 
 void MainWindow::resize()
 {
-  if (this->pRenderTarget == NULL)
+  if (this->renderTarget == NULL)
     return;
 
-  this->pRenderTarget->Resize(this->handleSize());
+  this->renderTarget->Resize(this->handleSize());
   this->calculateLayout();
   InvalidateRect(this->windowHandle, NULL, FALSE);
 }
@@ -129,14 +134,14 @@ LRESULT MainWindow::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   switch (uMsg) {
     case WM_CREATE:
-      if (FAILED(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &pFactory)))
+      if (FAILED(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &direct2DFactory)))
         return -1;
 
       return 0;
 
     case WM_DESTROY:
       this->discardGraphicsResources();
-      SafeRelease(&pFactory);
+      SafeRelease(&direct2DFactory);
       PostQuitMessage(0);
 
       return 0;
