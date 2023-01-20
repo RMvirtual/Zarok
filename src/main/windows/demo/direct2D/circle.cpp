@@ -26,34 +26,44 @@ void SafeRelease(T **ppT)
 
 void MainWindow::calculateLayout()
 {
-  if (pRenderTarget != NULL) {
-    D2D1_SIZE_F size = pRenderTarget->GetSize();
-    const float x = size.width / 2;
-    const float y = size.height / 2;
-    const float radius = min(x, y);
-    ellipse = D2D1::Ellipse(D2D1::Point2F(x, y), radius, radius);
-  }
+  if (this->pRenderTarget != NULL)
+    this->ellipse = this->generateEllipse();
+}
+
+D2D1_ELLIPSE MainWindow::generateEllipse()
+{
+  auto coordinates = this->centreCoordinates();
+  const float radius = min(coordinates.x, coordinates.y);
+  
+  return D2D1::Ellipse(coordinates, radius, radius);
+}
+
+D2D1_POINT_2F MainWindow::centreCoordinates()
+{
+  auto size = this->pRenderTarget->GetSize();
+    
+  return D2D1::Point2F(size.width/2, size.height/2);
 }
 
 HRESULT MainWindow::createGraphicsResources()
 {
   HRESULT hr = S_OK;
 
-  if (pRenderTarget == NULL) {
+  if (this->pRenderTarget == NULL) {
     RECT rc;
-    GetClientRect(windowHandle, &rc);
+    GetClientRect(this->windowHandle, &rc);
 
     D2D1_SIZE_U size = D2D1::SizeU(rc.right, rc.bottom);
 
     hr = pFactory->CreateHwndRenderTarget(
       D2D1::RenderTargetProperties(),
-      D2D1::HwndRenderTargetProperties(windowHandle, size),
+      D2D1::HwndRenderTargetProperties(this->windowHandle, size),
       &pRenderTarget
     );
 
     if (SUCCEEDED(hr)) {
       const D2D1_COLOR_F color = D2D1::ColorF(1.0f, 1.0f, 0);
-      hr = pRenderTarget->CreateSolidColorBrush(color, &pBrush);
+      hr = this->pRenderTarget->CreateSolidColorBrush(color, &pBrush);
 
       if (SUCCEEDED(hr))
         calculateLayout();

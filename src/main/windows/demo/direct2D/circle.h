@@ -24,5 +24,6 @@ private:
 
   D2D1_SIZE_U handleSize();
   RECT rectangle();
-
+  D2D1_ELLIPSE generateEllipse();
+  D2D1_POINT_2F centreCoordinates();
 };

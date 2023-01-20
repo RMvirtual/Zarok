@@ -8,7 +8,16 @@
 		"files.associations": {
 			"string": "cpp",
 			"xstring": "cpp",
-			"*.rh": "cpp"
+			"*.rh": "cpp",
+			"xiosbase": "cpp",
+			"algorithm": "cpp",
+			"bit": "cpp",
+			"charconv": "cpp",
+			"codecvt": "cpp",
+			"functional": "cpp",
+			"random": "cpp",
+			"xlocale": "cpp",
+			"xlocnum": "cpp"
 		}
 	}
 }
