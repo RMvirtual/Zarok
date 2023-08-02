@@ -1,3 +1,4 @@
+$env:DEVENV = $null;
 $rootDirectory = Resolve-Path "$PSScriptRoot\..\.."
 
 if (-Not (Test-Path "$rootDirectory\tools\devenv\working_directory.ps1")) {
