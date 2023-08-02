@@ -3,12 +3,12 @@
 // Declare the window procedure
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow) {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     // Register the window class
-    WNDCLASSW wc = {};  // Note the 'W' suffix for the Unicode version of the structure
+    WNDCLASSW wc = {};
     wc.lpfnWndProc = WindowProc;
     wc.hInstance = hInstance;
-    wc.lpszClassName = L"SampleWindowClass";  // L prefix for wide character string
+    wc.lpszClassName = L"SampleWindowClass";  // Use "L" prefix for Unicode strings
     RegisterClassW(&wc);
 
     // Create the window

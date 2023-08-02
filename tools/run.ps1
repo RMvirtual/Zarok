@@ -1,1 +1,1 @@
-Write-Host "Should run here."
+& "$env:DEVENV\build\release\main.exe"
