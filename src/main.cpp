@@ -1,34 +1,35 @@
 #include <windows.h>
 
 
-HINSTANCE hInst;
-HWND hWnd;
-HBITMAP hBitmap;
+HINSTANCE WINDOWS_INSTANCE;
+HWND WINDOW_HANDLER;
+HBITMAP BITMAP_BUFFER;
 
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK WndProc(
+    HWND windowHandle, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message) {
     case WM_PAINT: {
         PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hWnd, &ps);
+        HDC hdc = BeginPaint(windowHandle, &ps);
 
         int width = 200;
         int height = 200;
 
         // Draw bitmap onto window.
         HDC hdcMem = CreateCompatibleDC(hdc);
-        HBITMAP hOldBitmap = (HBITMAP) SelectObject(hdcMem, hBitmap);
+        HBITMAP hOldBitmap = (HBITMAP) SelectObject(hdcMem, BITMAP_BUFFER);
         BitBlt(hdc, 0, 0, width, height, hdcMem, 0, 0, SRCCOPY);
         SelectObject(hdcMem, hOldBitmap);
         DeleteDC(hdcMem);
 
-        EndPaint(hWnd, &ps);
+        EndPaint(windowHandle, &ps);
         break;
     }
 
     case WM_CLOSE:
-        DestroyWindow(hWnd);
+        DestroyWindow(windowHandle);
         break;
 
     case WM_DESTROY:
@@ -36,7 +37,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 
     default:
-        return DefWindowProcW(hWnd, message, wParam, lParam);
+        return DefWindowProcW(windowHandle, message, wParam, lParam);
     }
     
     return 0;
@@ -47,54 +48,54 @@ int WINAPI WinMain(
     HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine,
     int nCmdShow
 ) {
-    hInst = hInstance;
+    WINDOWS_INSTANCE = hInstance;
     int width = 400;  
     int height = 300;
 
     // Create in-memory device context and compatible bitmap.
-    HDC hdc = GetDC(NULL);
-    HDC hdcMem = CreateCompatibleDC(hdc);
+    HDC deviceContext = GetDC(NULL);
+    HDC deviceContextBuffer = CreateCompatibleDC(deviceContext);
     
-    hBitmap = CreateCompatibleBitmap(hdc, width, height);
-    SelectObject(hdcMem, hBitmap);
+    BITMAP_BUFFER = CreateCompatibleBitmap(deviceContext, width, height);
+    SelectObject(deviceContextBuffer, BITMAP_BUFFER);
 
     // Draw on in-memory bitmap.
-    HBRUSH hBrush = CreateSolidBrush(RGB(255, 0, 0));
-    RECT rect {0, 0, width, height};
-    FillRect(hdcMem, &rect, hBrush);
-    DeleteObject(hBrush);
+    HBRUSH brush = CreateSolidBrush(RGB(255, 0, 0));
+    RECT rectangle {0, 0, width, height};
+    FillRect(deviceContextBuffer, &rectangle, brush);
+    DeleteObject(brush);
 
     // Release resources.
-    DeleteDC(hdcMem);
-    ReleaseDC(NULL, hdc);    
+    DeleteDC(deviceContextBuffer);
+    ReleaseDC(NULL, deviceContext);    
 
     // Register window class.
-    WNDCLASSEXW wcex {
+    WNDCLASSEXW windowClass {
         sizeof(WNDCLASSEXW), CS_HREDRAW | CS_VREDRAW, WndProc, 0L, 0L,
         GetModuleHandle(NULL), NULL, NULL, NULL, NULL, L"BitmapWindowClass",
         NULL
     };
     
-    RegisterClassExW(&wcex);
+    RegisterClassExW(&windowClass);
 
     // Create window.
-    hWnd = CreateWindowW(
+    WINDOW_HANDLER = CreateWindowW(
         L"BitmapWindowClass", L"Bitmap Window",
         WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
         width, height, NULL, NULL, hInstance, NULL
     );
 
     // Display window.
-    ShowWindow(hWnd, nCmdShow);
-    UpdateWindow(hWnd);
+    ShowWindow(WINDOW_HANDLER, nCmdShow);
+    UpdateWindow(WINDOW_HANDLER);
 
     // Event loop.
-    MSG msg;
+    MSG event;
 
-    while (GetMessageW(&msg, NULL, 0, 0)) {
-        TranslateMessage(&msg);
-        DispatchMessageW(&msg);
+    while (GetMessageW(&event, NULL, 0, 0)) {
+        TranslateMessage(&event);
+        DispatchMessageW(&event);
     }
 
-    return (int) msg.wParam;
+    return (int) event.wParam;
 }
