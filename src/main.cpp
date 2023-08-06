@@ -15,8 +15,8 @@ int WINAPI WinMain(
     int nCmdShow
 ) {
     WINDOWS_INSTANCE = hInstance;
-    int width = 400;  
-    int height = 300;
+    int width = 300;  
+    int height = 400;
 
     // Create in-memory device context and compatible bitmap.
     HDC deviceContext = GetDC(NULL);
@@ -72,20 +72,27 @@ LRESULT CALLBACK processEvent(
 {
     switch (message) {
     case WM_PAINT: {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(windowHandle, &ps);
+        PAINTSTRUCT paintStruct;
+        HDC deviceContext = BeginPaint(windowHandle, &paintStruct);
 
-        int width = 200;
-        int height = 200;
+        int width = 300;
+        int height = 400;
 
         // Draw bitmap onto window.
-        HDC hdcMem = CreateCompatibleDC(hdc);
-        HBITMAP hOldBitmap = (HBITMAP) SelectObject(hdcMem, BITMAP_BUFFER);
-        BitBlt(hdc, 0, 0, width, height, hdcMem, 0, 0, SRCCOPY);
-        SelectObject(hdcMem, hOldBitmap);
-        DeleteDC(hdcMem);
-
-        EndPaint(windowHandle, &ps);
+        HDC inMemoryDeviceContext = CreateCompatibleDC(deviceContext);
+        
+        HBITMAP oldBitmap = (HBITMAP) SelectObject(
+            inMemoryDeviceContext, BITMAP_BUFFER);
+        
+        BitBlt(
+            deviceContext, 0, 0, width, height, inMemoryDeviceContext,
+            0, 0, SRCCOPY
+        );
+        
+        SelectObject(inMemoryDeviceContext, oldBitmap);
+        
+        DeleteDC(inMemoryDeviceContext);
+        EndPaint(windowHandle, &paintStruct);
         break;
     }
 
