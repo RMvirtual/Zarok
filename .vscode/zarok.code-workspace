@@ -5,12 +5,13 @@
 		}
 	],
 	"settings": {
-		"powershell.integratedConsole.showOnStartup": false,
         "C_Cpp.files.exclude": {
             "**/.vscode": true,
             "**/.vs": true,
             "**/build": true,
             "**/devenv": true
-        }
+        },
+		"git.inputValidationLength": 150,
+		"powershell.integratedConsole.showOnStartup": false,
 	}
 }
