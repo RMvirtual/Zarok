@@ -1,56 +1,95 @@
 #include <windows.h>
 
-// Declare the window procedure
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-    // Register the window class
-    WNDCLASSW wc = {};
-    wc.lpfnWndProc = WindowProc;
-    wc.hInstance = hInstance;
-    wc.lpszClassName = L"SampleWindowClass";  // Use "L" prefix for Unicode strings
-    RegisterClassW(&wc);
+HINSTANCE hInst;
+HWND hWnd;
+HBITMAP hBitmap;
 
-    // Create the window
-    HWND hwnd = CreateWindowW(
-        L"SampleWindowClass",
-        L"Basic GUI Window",
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, 800, 600,
-        nullptr, nullptr, hInstance, nullptr
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch (message) {
+    case WM_PAINT: {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
+
+        int width = 200;
+        int height = 200;
+
+        // Draw the bitmap on the window
+        HDC hdcMem = CreateCompatibleDC(hdc);
+        HBITMAP hOldBitmap = (HBITMAP)SelectObject(hdcMem, hBitmap);
+        BitBlt(hdc, 0, 0, width, height, hdcMem, 0, 0, SRCCOPY);
+        SelectObject(hdcMem, hOldBitmap);
+        DeleteDC(hdcMem);
+
+        EndPaint(hWnd, &ps);
+        break;
+    }
+    case WM_CLOSE:
+        DestroyWindow(hWnd);
+        break;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+    default:
+        return DefWindowProcW(hWnd, message, wParam, lParam);
+    }
+    
+    return 0;
+}
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    hInst = hInstance;
+
+    // Create an in-memory device context and compatible bitmap.
+    HDC hdc = GetDC(NULL);
+    HDC hdcMem = CreateCompatibleDC(hdc);
+    
+    int width = 400;  
+    int height = 300;
+    hBitmap = CreateCompatibleBitmap(hdc, width, height);
+    SelectObject(hdcMem, hBitmap);
+
+    // Draw on in-memory bitmap.
+    HBRUSH hBrush = CreateSolidBrush(RGB(255, 0, 0));
+    RECT rect = { 0, 0, width, height };
+    FillRect(hdcMem, &rect, hBrush);
+    DeleteObject(hBrush);
+
+    // Release resources.
+    DeleteDC(hdcMem);
+    ReleaseDC(NULL, hdc);    
+
+    // Amended copy-paste ends here.
+    // Register window class.
+    WNDCLASSEXW wcex = {
+        sizeof(WNDCLASSEXW), CS_HREDRAW | CS_VREDRAW, WndProc, 0L, 0L,
+        GetModuleHandle(NULL), NULL, NULL, NULL, NULL, L"BitmapWindowClass",
+        NULL
+    };
+    
+    RegisterClassExW(&wcex);
+
+    // Create window.
+    hWnd = CreateWindowW(
+        L"BitmapWindowClass", L"Bitmap Window",
+        WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
+        width, height, NULL, NULL, hInstance, NULL
     );
 
-    if (hwnd == nullptr) {
-        return 0;
-    }
+    // Display window.
+    ShowWindow(hWnd, nCmdShow);
+    UpdateWindow(hWnd);
 
-    // Show the window
-    ShowWindow(hwnd, nCmdShow);
+    // Event loop.
+    MSG msg;
 
-    // Main message loop
-    MSG msg = {};
-    while (GetMessageW(&msg, nullptr, 0, 0)) {
+    while (GetMessageW(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessageW(&msg);
     }
 
-    return static_cast<int>(msg.wParam);
-}
-
-// Window procedure callback function
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    switch (uMsg) {
-        case WM_CLOSE:
-            DestroyWindow(hwnd);
-            break;
-        case WM_DESTROY:
-            PostQuitMessage(0);
-            break;
-        case WM_LBUTTONDOWN:
-            MessageBoxW(hwnd, L"Hello, Windows API!", L"Message", MB_OK | MB_ICONINFORMATION);
-            break;
-        default:
-            return DefWindowProcW(hwnd, uMsg, wParam, lParam);
-    }
-    return 0;
+    return (int) msg.wParam;
 }
