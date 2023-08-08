@@ -1,9 +1,8 @@
 #include <windows.h>
 #include "draw.h"
 
-
 HINSTANCE WINDOWS_INSTANCE;
-HWND WINDOW_HANDLER;
+HWND WINDOW;
 HBITMAP BITMAP_BUFFER;
 INT BITMAP_WIDTH = 400;
 INT BITMAP_HEIGHT = 400;
@@ -50,15 +49,15 @@ int WINAPI WinMain(
     RegisterClassExW(&windowClass);
 
     // Create window.
-    WINDOW_HANDLER = CreateWindowW(
+    WINDOW = CreateWindowW(
         L"BitmapWindowClass", L"Zarok",
         WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
         width, height, NULL, NULL, windowsInstance, NULL
     );
 
     // Display window.
-    ShowWindow(WINDOW_HANDLER, nCmdShow);
-    UpdateWindow(WINDOW_HANDLER);
+    ShowWindow(WINDOW, nCmdShow);
+    UpdateWindow(WINDOW);
 
     // Event loop.
     MSG event;
