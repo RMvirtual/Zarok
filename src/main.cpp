@@ -6,6 +6,16 @@ HWND WINDOW_HANDLER;
 HBITMAP BITMAP_BUFFER;
 INT BITMAP_WIDTH = 400;
 INT BITMAP_HEIGHT = 400;
+bool IS_DRAWING = FALSE;
+POINT LAST_POINT;
+
+
+void drawLineSegment(HDC hdc, int x1, int y1, int x2, int y2)
+{
+    MoveToEx(hdc, x1, y1, NULL);
+    LineTo(hdc, x2, y2);
+}
+
 
 LRESULT CALLBACK processEvent(
     HWND windowHandle, UINT message, WPARAM wParam, LPARAM lParam);
@@ -79,6 +89,31 @@ LRESULT CALLBACK processEvent(
         InvalidateRect(windowHandle, NULL, TRUE); // Trigger a repaint
         break;
     }
+
+    case WM_LBUTTONDOWN:
+        IS_DRAWING = true;
+        LAST_POINT.x = LOWORD(lParam);
+        LAST_POINT.y = HIWORD(lParam);
+        break;
+
+    case WM_LBUTTONUP:
+        IS_DRAWING = false;
+        break;
+
+    case WM_MOUSEMOVE:
+        if (IS_DRAWING)
+        {
+            HDC hdc = GetDC(windowHandle);
+            int x = LOWORD(lParam);
+            int y = HIWORD(lParam);
+
+            drawLineSegment(hdc, LAST_POINT.x, LAST_POINT.y, x, y);
+            ReleaseDC(windowHandle, hdc);
+            
+            LAST_POINT.x = x;
+            LAST_POINT.y = y;
+        }
+
     case WM_PAINT: {
         PAINTSTRUCT paintStruct;
         HDC deviceContext = BeginPaint(windowHandle, &paintStruct);
@@ -96,14 +131,7 @@ LRESULT CALLBACK processEvent(
             deviceContext, 0, 0, BITMAP_WIDTH, BITMAP_HEIGHT,
             inMemoryDeviceContext, 0, 0, width, height, SRCCOPY
         );
-        
-        /*
-        BitBlt(
-            deviceContext, 0, 0, width, height, inMemoryDeviceContext,
-            0, 0, SRCCOPY
-        );
-        */
-       
+               
         SelectObject(inMemoryDeviceContext, oldBitmap);
         
         DeleteDC(inMemoryDeviceContext);
