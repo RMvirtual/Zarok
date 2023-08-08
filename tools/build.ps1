@@ -1,11 +1,12 @@
-$TARGET = "$env:DEVENV\build"
-$RELEASE = "$TARGET\release"
+$BUILD = "$env:DEVENV\build"
+$RELEASE = "$BUILD\release"
+$TESTS = "$BUILD\tests"
 $SRC = "$env:DEVENV\src"
-$TESTS = "$TARGET\tests"
+$TEST_SRC = "$env:DEVENV\tests"
+$GOOGLETEST = "$env:DEVENV\devenv\GOOGLETEST"
 
-Write-Host "Should build here."
 
-if (-Not (Test-Path $TARGET)) {New-Item $TARGET -ItemType Directory > $null}
+if (-Not (Test-Path $BUILD)) {New-Item $BUILD -ItemType Directory > $null}
 
 # Release.
 if (Test-Path $RELEASE) {Remove-Item $RELEASE -Recurse -Force > $null}
@@ -19,8 +20,10 @@ New-Item $RELEASE -ItemType Directory > $null
 if (Test-Path $TESTS) {Remove-Item $TESTS -Recurse -Force > $null}
 New-Item $TESTS -ItemType Directory > $null
 
-$googletest = "$env:DEVENV\devenv\googletest"
+$gtestIncludes = "$GOOGLETEST\googletest\include"
+$gtestObject = "$GOOGLETEST\gtest-all.o"
+$testExecutable = "$TESTS\all_tests.exe"
 
-g++.exe -std=c++17 -isystem "$googletest\googletest\include" -pthread `
-    "$env:DEVENV\tests\test_example.cpp" "$googletest\gtest-all.o" `
-    -o "$TESTS\my_tests"
+g++.exe -o $testExecutable `
+    -std=c++17 -isystem $gtestIncludes -pthread `
+    "$TEST_SRC\test_example.cpp" $gtestObject 
