@@ -13,9 +13,9 @@ if (Test-Path $RELEASE) {Remove-Item $RELEASE -Recurse -Force > $null}
 New-Item $RELEASE -ItemType Directory > $null
 
 g++.exe -o "$RELEASE\main.exe" `
-    -std=c++17 `
     "$SRC\main.cpp" "$SRC\draw.cpp" `
-    -mwindows -luser32 -lgdi32
+    -std=c++17 -mwindows -luser32 -lgdi32
+    
 
 # Tests.
 Write-Host "Building tests."
@@ -29,5 +29,5 @@ $testExecutable = "$TESTS\all_tests.exe"
 
 g++.exe -o $testExecutable `
     -std=c++17 -isystem $gtestIncludes -pthread  -I"$SRC" `
-    "$TEST_SRC\test_example.cpp" "$TEST_SRC\maths\test_vector.cpp" `
+    "$TEST_SRC\test_runner.cpp" "$TEST_SRC\maths\test_vector.cpp" `
     "$SRC\maths\vector.cpp"$gtestObject 

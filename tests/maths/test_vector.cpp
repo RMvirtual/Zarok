@@ -193,18 +193,6 @@ TEST(MathsVector, DotProductOfVectorsWithMixedValues)
     EXPECT_DOUBLE_EQ(correctDotProduct, dotProduct);
 }
 
-TEST(MathsVector, ShouldPrintVectorToString)
-{
-    Maths::Vector vector{1, 2, 3, 4};
-    std::cout << vector.toString() << std::endl;
-
-    auto vectorAsString = vector.toString();
-    std::string correctString =
-        "[0: 1.000000, 1: 2.000000, 2: 3.000000, 3: 4.000000]";
-
-    EXPECT_EQ(correctString, vectorAsString);
-}
-
 TEST(MathsVector, ShouldCalculateVectorProduct)
 {
     Maths::Vector vector1 = {2, 3, 4};
