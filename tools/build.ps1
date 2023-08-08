@@ -12,7 +12,8 @@ if (-Not (Test-Path $BUILD)) {New-Item $BUILD -ItemType Directory > $null}
 if (Test-Path $RELEASE) {Remove-Item $RELEASE -Recurse -Force > $null}
 New-Item $RELEASE -ItemType Directory > $null
 
-& $env:COMPILE -o "$RELEASE\main.exe" `
+g++.exe -o "$RELEASE\main.exe" `
+    -std=c++17 `
     "$SRC\main.cpp" "$SRC\draw.cpp" `
     -mwindows -luser32 -lgdi32
 
