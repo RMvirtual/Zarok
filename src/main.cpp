@@ -80,7 +80,7 @@ LRESULT CALLBACK processEvent(
         BITMAP_WIDTH = LOWORD(lParam);
         BITMAP_HEIGHT = HIWORD(lParam);
 
-        InvalidateRect(window, NULL, TRUE); // Trigger a repaint
+        InvalidateRect(window, NULL, TRUE);  // Trigger repaint.
         break;
     }
 
