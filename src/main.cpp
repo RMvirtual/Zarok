@@ -12,14 +12,14 @@ POINT LAST_POINT;
 
 
 LRESULT CALLBACK processEvent(
-    HWND windowHandle, UINT message, WPARAM wParam, LPARAM lParam);
+    HWND window, UINT event, WPARAM wParam, LPARAM lParam);
 
 
 int WINAPI WinMain(
-    HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine,
-    int nCmdShow
+    HINSTANCE windowsInstance, HINSTANCE previousWindowsInstance,
+    LPSTR lpCmdLine, int nCmdShow
 ) {
-    WINDOWS_INSTANCE = hInstance;
+    WINDOWS_INSTANCE = windowsInstance;
     int width = 300;
     int height = 400;
 
@@ -51,9 +51,9 @@ int WINAPI WinMain(
 
     // Create window.
     WINDOW_HANDLER = CreateWindowW(
-        L"BitmapWindowClass", L"Bitmap Window",
+        L"BitmapWindowClass", L"Zarok",
         WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
-        width, height, NULL, NULL, hInstance, NULL
+        width, height, NULL, NULL, windowsInstance, NULL
     );
 
     // Display window.
@@ -73,14 +73,14 @@ int WINAPI WinMain(
 
 
 LRESULT CALLBACK processEvent(
-    HWND windowHandle, UINT message, WPARAM wParam, LPARAM lParam)
+    HWND window, UINT event, WPARAM wParam, LPARAM lParam)
 {
-    switch (message) {
+    switch (event) {
     case WM_SIZE: {
         BITMAP_WIDTH = LOWORD(lParam);
         BITMAP_HEIGHT = HIWORD(lParam);
 
-        InvalidateRect(windowHandle, NULL, TRUE); // Trigger a repaint
+        InvalidateRect(window, NULL, TRUE); // Trigger a repaint
         break;
     }
 
@@ -95,14 +95,13 @@ LRESULT CALLBACK processEvent(
         break;
 
     case WM_MOUSEMOVE:
-        if (IS_DRAWING)
-        {
-            HDC deviceContext = GetDC(windowHandle);
+        if (IS_DRAWING) {
+            HDC deviceContext = GetDC(window);
             int x = LOWORD(lParam);
             int y = HIWORD(lParam);
 
             drawLineSegment(deviceContext, LAST_POINT.x, LAST_POINT.y, x, y);
-            ReleaseDC(windowHandle, deviceContext);
+            ReleaseDC(window, deviceContext);
             
             LAST_POINT.x = x;
             LAST_POINT.y = y;
@@ -110,7 +109,7 @@ LRESULT CALLBACK processEvent(
 
     case WM_PAINT: {
         PAINTSTRUCT paintStruct;
-        HDC deviceContext = BeginPaint(windowHandle, &paintStruct);
+        HDC deviceContext = BeginPaint(window, &paintStruct);
 
         int width = 300;
         int height = 400;
@@ -129,12 +128,12 @@ LRESULT CALLBACK processEvent(
         SelectObject(inMemoryDeviceContext, oldBitmap);
         
         DeleteDC(inMemoryDeviceContext);
-        EndPaint(windowHandle, &paintStruct);
+        EndPaint(window, &paintStruct);
         break;
     }
 
     case WM_CLOSE:
-        DestroyWindow(windowHandle);
+        DestroyWindow(window);
         break;
 
     case WM_DESTROY:
@@ -142,7 +141,7 @@ LRESULT CALLBACK processEvent(
         break;
 
     default:
-        return DefWindowProcW(windowHandle, message, wParam, lParam);
+        return DefWindowProcW(window, event, wParam, lParam);
     }
     
     return 0;
