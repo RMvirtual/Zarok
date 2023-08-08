@@ -1,4 +1,7 @@
-Write-Host "Installing development environment."
+$LIBRARY_SCRIPTS = "$env:DEVENV\tools\libraries"
+$TOOLS = "$env:DEVENV\tools\devenv"
 
-& "$env:DEVENV\tools\devenv\download_libraries.ps1"
-& "$env:DEVENV\tools\devenv\configure_compiler.ps1"
+
+& "$LIBRARY_SCRIPTS\gcc.ps1"
+& "$LIBRARY_SCRIPTS\googletest.ps1"
+& "$TOOLS\configure_libraries.ps1"

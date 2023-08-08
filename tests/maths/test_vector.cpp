@@ -171,7 +171,7 @@ TEST(MathsVector, ShouldDivideVectorWithAScalar)
         EXPECT_DOUBLE_EQ(correctValues[elementNo], resultVector[elementNo]);
 }
 
-TEST(MathsVector, DotProductOfVectorsWithPositiveValues)
+TEST(MathsVector, ShouldCalculateDotProductWithPositiveValues)
 {
     Maths::Vector lhsVector{1, 2, 3, 4};
     Maths::Vector rhsVector{5, 6, 7, 8};
@@ -182,7 +182,7 @@ TEST(MathsVector, DotProductOfVectorsWithPositiveValues)
     EXPECT_DOUBLE_EQ(correctDotProduct, dotProduct);
 }
 
-TEST(MathsVector, DotProductOfVectorsWithMixedValues)
+TEST(MathsVector, ShouldCalculateDotProductWithMixedSignValues)
 {
     Maths::Vector lhsVector{-1, -5, 15, 6};
     Maths::Vector rhsVector{5, -6, -7, 8};
