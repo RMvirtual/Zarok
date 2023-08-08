@@ -1,4 +1,5 @@
-#include <gtest/gtest.h>
+#include <cmath>
+#include "gtest/gtest.h"
 #include "maths/vector.h"
 
 TEST(MathsVector, ShouldCreateVectorWithTwoElements)

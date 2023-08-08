@@ -18,6 +18,8 @@ g++.exe -o "$RELEASE\main.exe" `
     -mwindows -luser32 -lgdi32
 
 # Tests.
+Write-Host "Building tests."
+
 if (Test-Path $TESTS) {Remove-Item $TESTS -Recurse -Force > $null}
 New-Item $TESTS -ItemType Directory > $null
 
@@ -26,5 +28,6 @@ $gtestObject = "$GOOGLETEST\gtest-all.o"
 $testExecutable = "$TESTS\all_tests.exe"
 
 g++.exe -o $testExecutable `
-    -std=c++17 -isystem $gtestIncludes -pthread `
-    "$TEST_SRC\test_example.cpp" $gtestObject 
+    -std=c++17 -isystem $gtestIncludes -pthread  -I"$SRC" `
+    "$TEST_SRC\test_example.cpp" "$TEST_SRC\maths\test_vector.cpp" `
+    "$SRC\maths\vector.cpp"$gtestObject 
