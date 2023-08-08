@@ -10,4 +10,6 @@ if (-Not (Test-Path $TARGET)) {New-Item $TARGET -ItemType Directory > $null}
 if (Test-Path $RELEASE) {Remove-Item $RELEASE -Recurse -Force > $null}
 New-Item $RELEASE -ItemType Directory > $null
 
-g++ "$SRC\main.cpp" -o "$RELEASE\main.exe" -mwindows -luser32 -lgdi32
+g++ -o "$RELEASE\main.exe" `
+    "$SRC\main.cpp" "$SRC\draw.cpp" `
+    -mwindows -luser32 -lgdi32
