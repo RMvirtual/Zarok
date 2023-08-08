@@ -4,7 +4,8 @@
 HINSTANCE WINDOWS_INSTANCE;
 HWND WINDOW_HANDLER;
 HBITMAP BITMAP_BUFFER;
-
+INT BITMAP_WIDTH = 400;
+INT BITMAP_HEIGHT = 400;
 
 LRESULT CALLBACK processEvent(
     HWND windowHandle, UINT message, WPARAM wParam, LPARAM lParam);
@@ -15,7 +16,7 @@ int WINAPI WinMain(
     int nCmdShow
 ) {
     WINDOWS_INSTANCE = hInstance;
-    int width = 300;  
+    int width = 300;
     int height = 400;
 
     // Create in-memory device context and compatible bitmap.
@@ -71,6 +72,13 @@ LRESULT CALLBACK processEvent(
     HWND windowHandle, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message) {
+    case WM_SIZE: {
+        BITMAP_WIDTH = LOWORD(lParam);
+        BITMAP_HEIGHT = HIWORD(lParam);
+
+        InvalidateRect(windowHandle, NULL, TRUE); // Trigger a repaint
+        break;
+    }
     case WM_PAINT: {
         PAINTSTRUCT paintStruct;
         HDC deviceContext = BeginPaint(windowHandle, &paintStruct);
@@ -83,12 +91,19 @@ LRESULT CALLBACK processEvent(
         
         HBITMAP oldBitmap = (HBITMAP) SelectObject(
             inMemoryDeviceContext, BITMAP_BUFFER);
+
+        StretchBlt(
+            deviceContext, 0, 0, BITMAP_WIDTH, BITMAP_HEIGHT,
+            inMemoryDeviceContext, 0, 0, width, height, SRCCOPY
+        );
         
+        /*
         BitBlt(
             deviceContext, 0, 0, width, height, inMemoryDeviceContext,
             0, 0, SRCCOPY
         );
-        
+        */
+       
         SelectObject(inMemoryDeviceContext, oldBitmap);
         
         DeleteDC(inMemoryDeviceContext);
