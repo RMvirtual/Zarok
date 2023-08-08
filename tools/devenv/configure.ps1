@@ -1,5 +1,7 @@
-if (-Not (Test-Path "$env:DEVENV\devenv")) {
-    & "$env:DEVENV\tools\devenv\install.ps1"
-}
+$LIBRARY_SCRIPTS = "$env:DEVENV\tools\libraries"
+$TARGET = "$env:DEVENV\devenv"
+$TOOLS = "$env:DEVENV\tools\devenv"
 
-& "$env:DEVENV\tools\devenv\configure_libraries.ps1"
+
+if (-Not (Test-Path $TARGET)) {& "$TOOLS\install.ps1"}
+& "$LIBRARY_SCRIPTS\configure.ps1"
