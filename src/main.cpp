@@ -97,12 +97,12 @@ LRESULT CALLBACK processEvent(
     case WM_MOUSEMOVE:
         if (IS_DRAWING)
         {
-            HDC hdc = GetDC(windowHandle);
+            HDC deviceContext = GetDC(windowHandle);
             int x = LOWORD(lParam);
             int y = HIWORD(lParam);
 
-            drawLineSegment(hdc, LAST_POINT.x, LAST_POINT.y, x, y);
-            ReleaseDC(windowHandle, hdc);
+            drawLineSegment(deviceContext, LAST_POINT.x, LAST_POINT.y, x, y);
+            ReleaseDC(windowHandle, deviceContext);
             
             LAST_POINT.x = x;
             LAST_POINT.y = y;
